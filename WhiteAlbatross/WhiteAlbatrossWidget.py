@@ -8,9 +8,9 @@ class WhiteAlbatrossWidget(QWidget):
     """
     Виджет рисования физических форм для Box2D по изображению
     """
-    POLYGON = 0
-    RECTANGLE = 1
-    CIRCLE = 2
+    # POLYGON = 0
+    # RECTANGLE = 1
+    # CIRCLE = 2
 
     FIGURE_TYPES = (Polygon.Polygon,
                     Rectangle.Rectangle,
@@ -20,10 +20,11 @@ class WhiteAlbatrossWidget(QWidget):
         QWidget.__init__(self, parent)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
-        self.type = WhiteAlbatrossWidget.POLYGON
+        self.type = 0
+
+        self.images = []
 
         self.image = None
-        self.figures = []
         self.figure = None
 
     def mousePressEvent(self, e):
@@ -40,7 +41,8 @@ class WhiteAlbatrossWidget(QWidget):
         if self.figure:
             self.figure.setPoint2(e.pos())
             self.update()
-        self.figures.append(self.figure)
+        if self.image:
+            self.image.addFigure(self.figure)
         self.figure = None
 
     def paintEvent(self, event):
@@ -53,14 +55,9 @@ class WhiteAlbatrossWidget(QWidget):
             new_pen.setColor(QColor(0, 150, 0))
             painter.setPen(new_pen)
 
-            qimage = self.image.get_qimage()
-            painter.drawImage(0, 0, qimage)
-            painter.drawRect(0, 0, qimage.width(), qimage.height())
+            self.image.draw(painter)
 
             painter.setPen(old_pen)
-
-        for figure in self.figures:
-            figure.draw(painter)
 
         if self.figure:
             self.figure.draw(painter)

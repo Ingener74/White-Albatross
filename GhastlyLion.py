@@ -2,24 +2,17 @@
 import sys
 
 from PySide.QtCore import Qt, QSettings, QDir, QDirIterator
-from PySide.QtGui import QApplication, QWidget, QFileDialog, QImage
+from PySide.QtGui import QApplication, QWidget, QFileDialog
 
 from WhiteAlbatross import WhiteAlbatrossWidget
 from GhastlyLion import Ui_GhastlyLion
+from WhiteAlbatross.Image import Image
 
 COMPANY = 'Venus.Games'
 APPNAME = 'GhastlyLion'
 
 
 # Aberrant Tiger
-
-
-class Image(object):
-    def __init__(self, file_name):
-        self.file_name = file_name
-
-    def get_qimage(self):
-        return QImage(self.file_name)
 
 
 class MainWindow(QWidget, Ui_GhastlyLion):

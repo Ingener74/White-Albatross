@@ -14,4 +14,4 @@ class Point(object):
         return 'Point({x}, {y})'.format(x=self.x, y=self.y)
 
     def __str__(self):
-        return self.__repr__(self)
+        return self.__repr__()
