@@ -1,38 +1,75 @@
 # encoding: utf8
 import sys
-from PySide.QtCore import Qt, QSettings
-from PySide.QtGui import QApplication, QWidget, QPainter, QPolygon
-from WhiteAlbatross import Point
+
+from PySide.QtCore import Qt, QSettings, QAbstractListModel
+
+from PySide.QtGui import QApplication, QWidget, QFileDialog
+
+from WhiteAlbatross import WhiteAlbatrossWidget
+from GhastlyLion import Ui_GhastlyLion
 
 COMPANY = 'Venus.Games'
 APPNAME = 'GhastlyLion'
 
 
-# Screaming Mercury
 # Aberrant Tiger
 
 
-class MainWindow(QWidget):
+class Image(object):
+    def __init__(self):
+        pass
+
+
+class ImageFileList(QAbstractListModel):
+    def __init__(self):
+        QAbstractListModel.__init__(self)
+
+        self.images = []
+
+    def rowCount(self, *args, **kwargs):
+        return len(self.images)
+
+
+class MainWindow(QWidget, Ui_GhastlyLion):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
+        self.setupUi(self)
 
         self.settings = QSettings(QSettings.IniFormat, QSettings.UserScope, COMPANY, APPNAME)
         self.restoreGeometry(self.settings.value(self.__class__.__name__))
 
-        self.polygon = [Point(3, 4), Point(10, 20), Point(40, 10)]
+        self.white_albatross = WhiteAlbatrossWidget()
+        self.workLayout.insertWidget(1, self.white_albatross)
 
-    def paintEvent(self, *args, **kwargs):
-        painter = QPainter(self)
+        self.save.clicked.connect(self.save_button)
+        self.addImages.clicked.connect(self.add_images_click)
+        self.openFolder.clicked.connect(self.open_folder)
+        self.removeImages.clicked.connect(self.remove_images)
 
-        painter.drawPolygon(QPolygon([p.qpoint() for p in self.polygon]))
+        self.images_list = ImageFileList()
+        self.images_list.rowsRemoved.connect(self.images_removed)
 
-    def mousePressEvent(self, *args, **kwargs):
+        self.imagesList.setModel(self.images_list)
+
+    def add_images_click(self):
+        files = QFileDialog.getOpenFileNames(parent=self,
+                                             caption=u'Add image files to polygon list')
+
+        self.images_list.insertRow()
+
+    def open_folder(self):
         pass
 
-    def mouseMoveEvent(self, *args, **kwargs):
+    def remove_images(self):
         pass
 
-    def mouseReleaseEvent(self, *args, **kwargs):
+    def images_removed(self, *args, **kwargs):
+        if self.images_list.rowCount() == 0:
+            self.removeImages.setEnabled(False)
+        else:
+            self.removeImages.setEnabled(True)
+
+    def save_button(self):
         pass
 
     def keyPressEvent(self, *args, **kwargs):

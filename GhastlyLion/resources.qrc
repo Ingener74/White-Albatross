@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="main">
+    <file>ajouter.png</file>
+    <file>dossierbleu_download.png</file>
+    <file>moins.png</file>
+    <file>plus.png</file>
+    <file>supprimer.png</file>
+    <file>floppy.png</file>
+    <file>folder_open.png</file>
+    <file>lion.png</file>
+  </qresource>
+</RCC>
