@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:/Users/Pavel/workspace/White-Albatross/GhastlyLion/GhastlyLion.ui'
 #
-# Created: Fri Aug 14 23:56:47 2015
+# Created: Sat Aug 15 14:34:40 2015
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,12 +26,13 @@ class Ui_GhastlyLion(object):
         self.groupBox_2.setObjectName("groupBox_2")
         self.verticalLayout = QtGui.QVBoxLayout(self.groupBox_2)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.imagesList = QtGui.QListView(self.groupBox_2)
+        self.imagesList = QtGui.QListWidget(self.groupBox_2)
         self.imagesList.setObjectName("imagesList")
         self.verticalLayout.addWidget(self.imagesList)
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.addImages = QtGui.QPushButton(self.groupBox_2)
+        self.addImages.setWhatsThis("")
         self.addImages.setText("")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/main/ajouter.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -40,6 +41,7 @@ class Ui_GhastlyLion(object):
         self.addImages.setObjectName("addImages")
         self.horizontalLayout_2.addWidget(self.addImages)
         self.openFolder = QtGui.QPushButton(self.groupBox_2)
+        self.openFolder.setWhatsThis("")
         self.openFolder.setText("")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap(":/main/dossierbleu_download.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -49,6 +51,7 @@ class Ui_GhastlyLion(object):
         self.horizontalLayout_2.addWidget(self.openFolder)
         self.removeImages = QtGui.QPushButton(self.groupBox_2)
         self.removeImages.setEnabled(False)
+        self.removeImages.setWhatsThis("")
         self.removeImages.setText("")
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap(":/main/supprimer.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -64,6 +67,8 @@ class Ui_GhastlyLion(object):
         self.workLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
         self.workLayout.setContentsMargins(0, 0, 0, 0)
         self.workLayout.setObjectName("workLayout")
+        self.horizontalLayout_4 = QtGui.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.groupBox = QtGui.QGroupBox(self.verticalLayoutWidget)
         self.groupBox.setObjectName("groupBox")
         self.horizontalLayout = QtGui.QHBoxLayout(self.groupBox)
@@ -76,20 +81,37 @@ class Ui_GhastlyLion(object):
         self.save.setIconSize(QtCore.QSize(64, 64))
         self.save.setObjectName("save")
         self.horizontalLayout.addWidget(self.save)
-        spacerItem1 = QtGui.QSpacerItem(402, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem1 = QtGui.QSpacerItem(299, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
-        self.workLayout.addWidget(self.groupBox)
+        self.horizontalLayout_4.addWidget(self.groupBox)
+        self.groupBox_3 = QtGui.QGroupBox(self.verticalLayoutWidget)
+        self.groupBox_3.setObjectName("groupBox_3")
+        self.verticalLayout_2 = QtGui.QVBoxLayout(self.groupBox_3)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.type = QtGui.QComboBox(self.groupBox_3)
+        self.type.setObjectName("type")
+        self.type.addItem("")
+        self.type.addItem("")
+        self.type.addItem("")
+        self.verticalLayout_2.addWidget(self.type)
+        self.horizontalLayout_4.addWidget(self.groupBox_3)
+        self.workLayout.addLayout(self.horizontalLayout_4)
         self.horizontalLayout_3.addWidget(self.splitter)
 
         self.retranslateUi(GhastlyLion)
         QtCore.QMetaObject.connectSlotsByName(GhastlyLion)
 
     def retranslateUi(self, GhastlyLion):
-        GhastlyLion.setWindowTitle(QtGui.QApplication.translate("GhastlyLion", "Жуткий лев", None, QtGui.QApplication.UnicodeUTF8))
+        GhastlyLion.setWindowTitle(QtGui.QApplication.translate("GhastlyLion", "Жуткий лев - рисователь физических форм для Box2D", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("GhastlyLion", "Файлы", None, QtGui.QApplication.UnicodeUTF8))
-        self.addImages.setWhatsThis(QtGui.QApplication.translate("GhastlyLion", "Добавить файлы", None, QtGui.QApplication.UnicodeUTF8))
-        self.openFolder.setWhatsThis(QtGui.QApplication.translate("GhastlyLion", "Открыть директорию", None, QtGui.QApplication.UnicodeUTF8))
-        self.removeImages.setWhatsThis(QtGui.QApplication.translate("GhastlyLion", "Убрать файлы", None, QtGui.QApplication.UnicodeUTF8))
+        self.addImages.setToolTip(QtGui.QApplication.translate("GhastlyLion", "Добавить файлы", None, QtGui.QApplication.UnicodeUTF8))
+        self.openFolder.setToolTip(QtGui.QApplication.translate("GhastlyLion", "Открыть директорию", None, QtGui.QApplication.UnicodeUTF8))
+        self.removeImages.setToolTip(QtGui.QApplication.translate("GhastlyLion", "Убрать файлы", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setTitle(QtGui.QApplication.translate("GhastlyLion", "Инструменты", None, QtGui.QApplication.UnicodeUTF8))
+        self.save.setToolTip(QtGui.QApplication.translate("GhastlyLion", "Сохранить полигоны", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_3.setTitle(QtGui.QApplication.translate("GhastlyLion", "Тип", None, QtGui.QApplication.UnicodeUTF8))
+        self.type.setItemText(0, QtGui.QApplication.translate("GhastlyLion", "Полигон", None, QtGui.QApplication.UnicodeUTF8))
+        self.type.setItemText(1, QtGui.QApplication.translate("GhastlyLion", "Прямоугольник", None, QtGui.QApplication.UnicodeUTF8))
+        self.type.setItemText(2, QtGui.QApplication.translate("GhastlyLion", "Круг", None, QtGui.QApplication.UnicodeUTF8))
 
 import resources_rc

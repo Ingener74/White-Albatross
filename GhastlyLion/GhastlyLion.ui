@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Жуткий лев</string>
+   <string>Жуткий лев - рисователь физических форм для Box2D</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
@@ -35,14 +35,17 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QListView" name="imagesList"/>
+        <widget class="QListWidget" name="imagesList"/>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QPushButton" name="addImages">
-           <property name="whatsThis">
+           <property name="toolTip">
             <string>Добавить файлы</string>
+           </property>
+           <property name="whatsThis">
+            <string/>
            </property>
            <property name="text">
             <string/>
@@ -61,8 +64,11 @@
          </item>
          <item>
           <widget class="QPushButton" name="openFolder">
-           <property name="whatsThis">
+           <property name="toolTip">
             <string>Открыть директорию</string>
+           </property>
+           <property name="whatsThis">
+            <string/>
            </property>
            <property name="text">
             <string/>
@@ -84,8 +90,11 @@
            <property name="enabled">
             <bool>false</bool>
            </property>
-           <property name="whatsThis">
+           <property name="toolTip">
             <string>Убрать файлы</string>
+           </property>
+           <property name="whatsThis">
+            <string/>
            </property>
            <property name="text">
             <string/>
@@ -122,43 +131,78 @@
      <widget class="QWidget" name="verticalLayoutWidget">
       <layout class="QVBoxLayout" name="workLayout">
        <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>Инструменты</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QPushButton" name="save">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/main/floppy.png</normaloff>:/main/floppy.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>64</width>
-              <height>64</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>402</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QGroupBox" name="groupBox">
+           <property name="title">
+            <string>Инструменты</string>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QPushButton" name="save">
+              <property name="toolTip">
+               <string>Сохранить полигоны</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/main/floppy.png</normaloff>:/main/floppy.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>64</width>
+                <height>64</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>299</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_3">
+           <property name="title">
+            <string>Тип</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QComboBox" name="type">
+              <item>
+               <property name="text">
+                <string>Полигон</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Прямоугольник</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Круг</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

@@ -1,9 +1,8 @@
 # encoding: utf8
 import sys
 
-from PySide.QtCore import Qt, QSettings, QAbstractListModel
-
-from PySide.QtGui import QApplication, QWidget, QFileDialog
+from PySide.QtCore import Qt, QSettings, QDir, QDirIterator
+from PySide.QtGui import QApplication, QWidget, QFileDialog, QImage
 
 from WhiteAlbatross import WhiteAlbatrossWidget
 from GhastlyLion import Ui_GhastlyLion
@@ -16,18 +15,11 @@ APPNAME = 'GhastlyLion'
 
 
 class Image(object):
-    def __init__(self):
-        pass
+    def __init__(self, file_name):
+        self.file_name = file_name
 
-
-class ImageFileList(QAbstractListModel):
-    def __init__(self):
-        QAbstractListModel.__init__(self)
-
-        self.images = []
-
-    def rowCount(self, *args, **kwargs):
-        return len(self.images)
+    def get_qimage(self):
+        return QImage(self.file_name)
 
 
 class MainWindow(QWidget, Ui_GhastlyLion):
@@ -45,20 +37,35 @@ class MainWindow(QWidget, Ui_GhastlyLion):
         self.addImages.clicked.connect(self.add_images_click)
         self.openFolder.clicked.connect(self.open_folder)
         self.removeImages.clicked.connect(self.remove_images)
+        self.imagesList.itemClicked.connect(self.item_clicked)
 
-        self.images_list = ImageFileList()
-        self.images_list.rowsRemoved.connect(self.images_removed)
+        self.type.currentIndexChanged.connect(self.white_albatross.setType)
 
-        self.imagesList.setModel(self.images_list)
+        self.images_list = []
 
     def add_images_click(self):
-        files = QFileDialog.getOpenFileNames(parent=self,
-                                             caption=u'Add image files to polygon list')
-
-        self.images_list.insertRow()
+        file_names, selected_filters = QFileDialog.getOpenFileNames(parent=self,
+                                                                    caption=u'Add image files to polygon list')
+        print file_names, selected_filters
 
     def open_folder(self):
-        pass
+        directory = QFileDialog.getExistingDirectory(parent=self,
+                                                     caption=u'Add images from directory')
+        folder = QDir(directory)
+        folder.setNameFilters(['*.png'])
+        folder.setFilter(QDir.Files or QDir.NoDotAndDotDot)
+
+        dir_iterator = QDirIterator(folder, flags=QDirIterator.Subdirectories, filters=QDir.Files)
+
+        images = []
+
+        while dir_iterator.hasNext():
+            images.append(dir_iterator.next())
+
+        self.images_list = [Image(image) for image in images]
+
+        self.imagesList.clear()
+        self.imagesList.addItems(images)
 
     def remove_images(self):
         pass
@@ -70,13 +77,17 @@ class MainWindow(QWidget, Ui_GhastlyLion):
             self.removeImages.setEnabled(True)
 
     def save_button(self):
-        pass
+        print 'Save'
 
-    def keyPressEvent(self, *args, **kwargs):
-        if args[0].key() == Qt.Key_Escape:
+    def item_clicked(self, item):
+        it = self.imagesList.indexFromItem(item).row()
+        self.white_albatross.setImage(self.images_list[it])
+
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key_Escape:
             self.close()
 
-    def closeEvent(self, *args, **kwargs):
+    def closeEvent(self, e):
         self.settings.setValue(self.__class__.__name__, self.saveGeometry())
 
 
