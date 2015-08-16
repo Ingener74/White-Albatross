@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="main">
+    <file>background.png</file>
     <file>ajouter.png</file>
     <file>dossierbleu_download.png</file>
     <file>moins.png</file>

@@ -1,7 +1,7 @@
 # encoding: utf8
 import json
 from PySide.QtCore import Signal, QDir
-from PySide.QtGui import QWidget, QPainter, QSizePolicy, QPen, QColor
+from PySide.QtGui import QWidget, QPainter, QSizePolicy, QPen, QColor, QTransform, QBrush, QImage, QPainterPath
 
 from WhiteAlbatross import Rectangle, Circle, Polygon, Image
 
@@ -29,6 +29,7 @@ class WhiteAlbatrossWidget(QWidget):
 
         self.image = None
         self.figure = None
+        self.scale = 1.0
 
     def mousePressEvent(self, e):
 
@@ -72,9 +73,20 @@ class WhiteAlbatrossWidget(QWidget):
             self.figuresChanged.emit(self.image.figures)
         self.figure = None
 
+    def wheelEvent(self, e):
+        self.scale += e.delta() / 1200.0
+        self.update()
+
     def paintEvent(self, event):
         painter = QPainter(self)
 
+        # Фон
+        painter_path = QPainterPath()
+        painter_path.addRect(0, 0, self.width() - 1, self.height() - 1)
+        painter.fillPath(painter_path,
+                         QBrush(QImage(':/main/background.png')))
+
+        painter.setTransform(QTransform().scale(self.scale, self.scale))
         if self.image is not None:
             old_pen = painter.pen()
 
@@ -89,7 +101,6 @@ class WhiteAlbatrossWidget(QWidget):
         if self.figure:
             self.figure.draw(painter)
 
-        painter.drawRect(0, 0, self.width() - 1, self.height() - 1)
 
     def addImages(self, directory, images):
         self.directory = directory
