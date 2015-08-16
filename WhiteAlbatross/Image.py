@@ -13,10 +13,8 @@ class Image(object):
         painter.drawRect(0, 0, qimage.width(), qimage.height())
 
         for figure in self.figures:
-            figure.draw(painter)
+            if figure:
+                figure.draw(painter)
 
     def addFigure(self, figure):
         self.figures.append(figure)
-
-    def get_qimage(self):
-        return QImage(self.file_name)

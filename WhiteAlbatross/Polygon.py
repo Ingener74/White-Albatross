@@ -14,3 +14,18 @@ class Polygon(object):
 
     def draw(self, painter):
         painter.drawPolygon(QPolygon([p.qpoint() for p in self.points]))
+
+    def inSide(self, point):
+        return False
+
+    def isControlPoint(self, point):
+        pass
+
+    def moveControlPoint(self, point):
+        pass
+
+    def __str__(self):
+        return self.__repr__()
+
+    def __repr__(self):
+        return 'Polygon()'
