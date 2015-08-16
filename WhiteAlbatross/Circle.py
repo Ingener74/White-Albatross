@@ -51,6 +51,15 @@ class Circle(object):
         painter.drawEllipse(self.x - Circle.CTRL / 2, self.y - Circle.CTRL / 2, Circle.CTRL, Circle.CTRL)
         # painter.drawEllipse(self.x2, self.y2, 3, 3)
 
+    def getDict(self):
+        return {
+            'circle': {
+                'x': self.x,
+                'y': self.y,
+                'radius': self.radius
+            }
+        }
+
     def __str__(self):
         return self.__repr__()
 

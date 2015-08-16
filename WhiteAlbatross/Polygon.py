@@ -24,6 +24,12 @@ class Polygon(object):
     def moveControlPoint(self, point):
         pass
 
+    def getDict(self):
+        return {
+            'polygon': {
+            }
+        }
+
     def __str__(self):
         return self.__repr__()
 

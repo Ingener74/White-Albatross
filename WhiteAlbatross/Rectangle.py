@@ -33,11 +33,11 @@ class Rectangle(object):
 
     def moveControlPoint(self, point):
         dist = distance(QPoint(self.x1, self.y1), point)
-        if dist < Rectangle.CTRL/2:
+        if dist < Rectangle.CTRL / 2:
             self.x1 = point.x()
-            self.y2 = point.y()
+            self.y1 = point.y()
         dist = distance(QPoint(self.x2, self.y2), point)
-        if dist < Rectangle.CTRL/2:
+        if dist < Rectangle.CTRL / 2:
             self.x2 = point.x()
             self.y2 = point.y()
 
@@ -45,6 +45,16 @@ class Rectangle(object):
         painter.drawRect(QRect(QPoint(self.x1, self.y1), QPoint(self.x2, self.y2)))
         painter.drawEllipse(self.x1 - Rectangle.CTRL / 2, self.y1 - Rectangle.CTRL / 2, Rectangle.CTRL, Rectangle.CTRL)
         painter.drawEllipse(self.x2 - Rectangle.CTRL / 2, self.y2 - Rectangle.CTRL / 2, Rectangle.CTRL, Rectangle.CTRL)
+
+    def getDict(self):
+        return {
+            'rect': {
+                'x1': self.x1,
+                'y1': self.y1,
+                'x2': self.x2,
+                'y2': self.y2
+            }
+        }
 
     def __str__(self):
         return self.__repr__()

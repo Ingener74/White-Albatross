@@ -52,9 +52,9 @@ class MainWindow(QWidget, Ui_GhastlyLion):
         images = []
 
         while dir_iterator.hasNext():
-            images.append(dir_iterator.next())
+            images.append(folder.relativeFilePath(dir_iterator.next()))
 
-        self.white_albatross.addImages(images)
+        self.white_albatross.addImages(folder, images)
         self.imagesList.addItems(images)
 
     def remove_images(self):
@@ -67,7 +67,7 @@ class MainWindow(QWidget, Ui_GhastlyLion):
             self.removeImages.setEnabled(True)
 
     def save_button(self):
-        print 'Save'
+        self.white_albatross.save()
 
     def item_clicked(self, item):
         self.white_albatross.selectImage(self.imagesList.indexFromItem(item).row())

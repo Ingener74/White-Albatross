@@ -1,10 +1,12 @@
 # encoding: utf8
-from PySide.QtCore import Signal
+import json
+from PySide.QtCore import Signal, QDir
 from PySide.QtGui import QWidget, QPainter, QSizePolicy, QPen, QColor
 
 from WhiteAlbatross import Rectangle, Circle, Polygon, Image
 
 
+# noinspection PyPep8Naming
 class WhiteAlbatrossWidget(QWidget):
     """
     Виджет рисования физических форм для Box2D по изображению
@@ -18,6 +20,7 @@ class WhiteAlbatrossWidget(QWidget):
 
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
+        self.directory = None
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.type = 0
@@ -88,8 +91,9 @@ class WhiteAlbatrossWidget(QWidget):
 
         painter.drawRect(0, 0, self.width() - 1, self.height() - 1)
 
-    def addImages(self, images):
-        self.images = [Image.Image(image) for image in images]
+    def addImages(self, directory, images):
+        self.directory = directory
+        self.images = [Image.Image(self.directory, image) for image in images]
 
     def selectImage(self, index):
         """
@@ -107,6 +111,11 @@ class WhiteAlbatrossWidget(QWidget):
         :return:
         """
         pass
+
+    def save(self):
+        with open(self.directory.path() + QDir.separator() + 'box2d.json', 'w') as js:
+            figures_ = [image.getDict() for image in self.images]
+            json.dump(obj=figures_, fp=js, separators=(',', ':'), indent=4)
 
     def setType(self, type):
         self.type = type
