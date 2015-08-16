@@ -30,19 +30,18 @@ class MainWindow(QWidget, Ui_GhastlyLion):
         self.splitter.restoreState(self.settings.value(SPLITTER))
         self.current_directory = self.settings.value(CURRENT_DIRECTORY)
 
-        self.type.setCurrentIndex(int(self.settings.value(LAST_FIGURE_TYPE, defaultValue=0)))
-
         self.white_albatross = WhiteAlbatrossWidget()
         self.white_albatross.figuresChanged.connect(self.on_figures_changed)
         self.workLayout.insertWidget(1, self.white_albatross)
+
+        self.type.currentIndexChanged.connect(self.white_albatross.setType)
+        self.type.setCurrentIndex(int(self.settings.value(LAST_FIGURE_TYPE, defaultValue=0)))
 
         self.save.clicked.connect(self.save_button)
         self.addImages.clicked.connect(self.add_images_click)
         self.openFolder.clicked.connect(self.open_folder)
         self.removeImages.clicked.connect(self.remove_images)
         self.imagesList.itemClicked.connect(self.item_clicked)
-
-        self.type.currentIndexChanged.connect(self.white_albatross.setType)
 
         self.figures.customContextMenuRequested.connect(self.figures_context_menu)
 
