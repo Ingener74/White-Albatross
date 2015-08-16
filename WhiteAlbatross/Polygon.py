@@ -10,7 +10,7 @@ class Polygon(object):
         pass
 
     def setPoint2(self, point):
-        pass
+        return True
 
     def draw(self, painter):
         painter.drawPolygon(QPolygon([p.qpoint() for p in self.points]))

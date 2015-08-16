@@ -1,9 +1,14 @@
 # encoding: utf8
 import json
+
 from PySide.QtCore import Signal, QDir
 from PySide.QtGui import QWidget, QPainter, QSizePolicy, QPen, QColor, QTransform, QBrush, QImage, QPainterPath
 
-from WhiteAlbatross import Rectangle, Circle, Polygon, Image
+from WhiteAlbatross.Image import Image
+from WhiteAlbatross.Figure import Figure
+from WhiteAlbatross.Rectangle import Rectangle
+from WhiteAlbatross.Circle import Circle
+from WhiteAlbatross.Polygon import Polygon
 
 
 # noinspection PyPep8Naming
@@ -14,9 +19,9 @@ class WhiteAlbatrossWidget(QWidget):
 
     figuresChanged = Signal(object)
 
-    FIGURE_TYPES = (Polygon.Polygon,
-                    Rectangle.Rectangle,
-                    Circle.Circle)
+    FIGURE_TYPES = (Polygon,
+                    Rectangle,
+                    Circle)
 
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
@@ -37,6 +42,7 @@ class WhiteAlbatrossWidget(QWidget):
             for figure in self.image.figures:
                 if figure:
                     if figure.isControlPoint(e.pos()):
+                        figure.setMode(Figure.MODE_CONTROL)
                         figure.moveControlPoint(e.pos())
                         self.update()
                         return
@@ -49,7 +55,7 @@ class WhiteAlbatrossWidget(QWidget):
         if self.image:
             for figure in self.image.figures:
                 if figure:
-                    if figure.isControlPoint(e.pos()):
+                    if figure.getMode() is Figure.MODE_CONTROL:
                         figure.moveControlPoint(e.pos())
                         self.update()
                         return
@@ -61,17 +67,17 @@ class WhiteAlbatrossWidget(QWidget):
         if self.image:
             for figure in self.image.figures:
                 if figure:
-                    if figure.isControlPoint(e.pos()):
+                    if figure.getMode() is Figure.MODE_CONTROL:
                         figure.moveControlPoint(e.pos())
+                        figure.setMode(Figure.MODE_NORMAL)
                         self.update()
                         return
         if self.figure:
-            self.figure.setPoint2(e.pos())
-            self.update()
-        if self.image and self.figure:
-            self.image.addFigure(self.figure)
-            self.figuresChanged.emit(self.image.figures)
-        self.figure = None
+            if self.figure.setPoint2(e.pos()) and self.image:
+                self.image.addFigure(self.figure)
+                self.figuresChanged.emit(self.image.figures)
+                self.figure = None
+        self.update()
 
     def wheelEvent(self, e):
         self.scale += e.delta() / 1200.0
@@ -101,10 +107,9 @@ class WhiteAlbatrossWidget(QWidget):
         if self.figure:
             self.figure.draw(painter)
 
-
     def addImages(self, directory, images):
         self.directory = directory
-        self.images = [Image.Image(self.directory, image) for image in images]
+        self.images = [Image(self.directory, image) for image in images]
 
     def selectImage(self, index):
         """
@@ -130,3 +135,7 @@ class WhiteAlbatrossWidget(QWidget):
 
     def setType(self, type):
         self.type = type
+
+    def deleteFigure(self, index):
+        if self.image:
+            del self.image.figures[index]

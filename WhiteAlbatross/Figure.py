@@ -1,5 +1,4 @@
 # encoding: utf8
-from abc import abstractmethod
 import math
 
 
@@ -10,27 +9,31 @@ def distance(point1, point2):
 
 # noinspection PyPep8Naming
 class Figure(object):
-    CTRL = 7
+    CTRL = 13
+
+    MODE_CONTROL = 0
+    MODE_NORMAL = 1
 
     def __init__(self):
-        pass
+        self.mode = Figure.MODE_NORMAL
 
-    @abstractmethod
+    def getMode(self):
+        return self.mode
+
+    def setMode(self, mode):
+        self.mode = mode
+
     def setPoint1(self, point):
         raise NotImplementedError
 
-    @abstractmethod
     def setPoint2(self, point):
         raise NotImplementedError
 
-    @abstractmethod
     def inSide(self, point):
         raise NotImplementedError
 
-    @abstractmethod
     def isControlPoint(self, point):
         raise NotImplementedError
 
-    @abstractmethod
     def draw(self, painter):
         raise NotImplementedError

@@ -3,14 +3,13 @@ import math
 
 from PySide.QtCore import QPoint
 
-from WhiteAlbatross.Figure import distance
+from WhiteAlbatross.Figure import distance, Figure
 
 
 # noinspection PyPep8Naming
-class Circle(object):
-    CTRL = 9
-
+class Circle(Figure):
     def __init__(self, x=0, y=0, radius=0):
+        Figure.__init__(self)
         self.x = x
         self.y = y
         self.radius = radius
@@ -21,6 +20,7 @@ class Circle(object):
 
     def setPoint2(self, point):
         self.radius = self.calcRadius(point)
+        return True
 
     def calcRadius(self, point):
         return math.sqrt(math.pow(point.y() - self.y, 2) +
@@ -37,13 +37,18 @@ class Circle(object):
         return math.fabs(self.radius - radius) < Circle.CTRL / 2 or dist < Circle.CTRL / 2
 
     def moveControlPoint(self, point):
-        dist = distance(QPoint(self.x, self.y), point)
-        if dist < Circle.CTRL / 2:
-            self.x = point.x()
-            self.y = point.y()
+        if self.mode is not Figure.MODE_CONTROL:
+            return
+
+        dist1 = distance(QPoint(self.x, self.y), point)
 
         radius = self.calcRadius(point)
-        if math.fabs(self.radius - radius) < Circle.CTRL:
+        dist2 = math.fabs(self.radius - radius)
+
+        if dist1 < dist2:
+            self.x = point.x()
+            self.y = point.y()
+        else:
             self.radius = radius
 
     def draw(self, painter):
