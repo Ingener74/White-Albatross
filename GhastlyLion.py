@@ -7,6 +7,10 @@ from PySide.QtGui import QApplication, QWidget, QFileDialog
 from WhiteAlbatross import WhiteAlbatrossWidget
 from GhastlyLion import Ui_GhastlyLion
 
+SPLITTER = 'splitter'
+LAST_FIGURE_TYPE = 'last_figure_type'
+CURRENT_DIRECTORY = 'current_directory'
+
 COMPANY = 'Venus.Games'
 APPNAME = 'GhastlyLion'
 
@@ -19,12 +23,17 @@ class MainWindow(QWidget, Ui_GhastlyLion):
         QWidget.__init__(self, parent)
         self.setupUi(self)
 
+        self.current_directory = None
+
         self.settings = QSettings(QSettings.IniFormat, QSettings.UserScope, COMPANY, APPNAME)
         self.restoreGeometry(self.settings.value(self.__class__.__name__))
-        self.splitter.restoreState(self.settings.value('splitter'))
+        self.splitter.restoreState(self.settings.value(SPLITTER))
+        self.current_directory = self.settings.value(CURRENT_DIRECTORY)
+
+        self.type.setCurrentIndex(int(self.settings.value(LAST_FIGURE_TYPE, defaultValue=0)))
 
         self.white_albatross = WhiteAlbatrossWidget()
-        self.white_albatross.figuresChanged.connect(self.figures_changed)
+        self.white_albatross.figuresChanged.connect(self.on_figures_changed)
         self.workLayout.insertWidget(1, self.white_albatross)
 
         self.save.clicked.connect(self.save_button)
@@ -35,15 +44,22 @@ class MainWindow(QWidget, Ui_GhastlyLion):
 
         self.type.currentIndexChanged.connect(self.white_albatross.setType)
 
+        self.figures.customContextMenuRequested.connect(self.figures_context_menu)
+
+        if self.current_directory:
+            self.open_folder()
+
     def add_images_click(self):
         file_names, selected_filters = QFileDialog.getOpenFileNames(parent=self,
                                                                     caption=u'Add image files to polygon list')
         print file_names, selected_filters
 
     def open_folder(self):
-        directory = QFileDialog.getExistingDirectory(parent=self,
-                                                     caption=u'Add images from directory')
-        folder = QDir(directory)
+        if not self.current_directory:
+            self.current_directory = QFileDialog.getExistingDirectory(parent=self,
+                                                                      caption=u'Add images from directory')
+
+        folder = QDir(self.current_directory)
         folder.setNameFilters(['*.png'])
         folder.setFilter(QDir.Files or QDir.NoDotAndDotDot)
 
@@ -72,9 +88,12 @@ class MainWindow(QWidget, Ui_GhastlyLion):
     def item_clicked(self, item):
         self.white_albatross.selectImage(self.imagesList.indexFromItem(item).row())
 
-    def figures_changed(self, figures):
+    def on_figures_changed(self, figures):
         self.figures.clear()
         self.figures.addItems([str(figure) for figure in figures])
+
+    def figures_context_menu(self, point):
+        print point
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
@@ -82,7 +101,9 @@ class MainWindow(QWidget, Ui_GhastlyLion):
 
     def closeEvent(self, e):
         self.settings.setValue(self.__class__.__name__, self.saveGeometry())
-        self.settings.setValue('splitter', self.splitter.saveState())
+        self.settings.setValue(SPLITTER, self.splitter.saveState())
+        self.settings.setValue(CURRENT_DIRECTORY, self.current_directory)
+        self.settings.setValue(LAST_FIGURE_TYPE, self.type.currentIndex())
 
 
 if __name__ == '__main__':
