@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:/Users/Pavel/workspace/White-Albatross/GhastlyLion/GhastlyLion.ui'
+# Form implementation generated from reading ui file 'GhastlyLion/GhastlyLion.ui'
 #
-# Created: Sun Aug 16 10:37:51 2015
+# Created: Mon Aug 17 09:02:16 2015
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -37,7 +37,7 @@ class Ui_GhastlyLion(object):
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/main/ajouter.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.addImages.setIcon(icon1)
-        self.addImages.setIconSize(QtCore.QSize(64, 64))
+        self.addImages.setIconSize(QtCore.QSize(32, 32))
         self.addImages.setObjectName("addImages")
         self.horizontalLayout_2.addWidget(self.addImages)
         self.openFolder = QtGui.QPushButton(self.groupBox_2)
@@ -46,7 +46,7 @@ class Ui_GhastlyLion(object):
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap(":/main/dossierbleu_download.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.openFolder.setIcon(icon2)
-        self.openFolder.setIconSize(QtCore.QSize(64, 64))
+        self.openFolder.setIconSize(QtCore.QSize(32, 32))
         self.openFolder.setObjectName("openFolder")
         self.horizontalLayout_2.addWidget(self.openFolder)
         self.removeImages = QtGui.QPushButton(self.groupBox_2)
@@ -56,7 +56,7 @@ class Ui_GhastlyLion(object):
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap(":/main/supprimer.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.removeImages.setIcon(icon3)
-        self.removeImages.setIconSize(QtCore.QSize(64, 64))
+        self.removeImages.setIconSize(QtCore.QSize(32, 32))
         self.removeImages.setObjectName("removeImages")
         self.horizontalLayout_2.addWidget(self.removeImages)
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
@@ -78,19 +78,19 @@ class Ui_GhastlyLion(object):
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap(":/main/floppy.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.save.setIcon(icon4)
-        self.save.setIconSize(QtCore.QSize(64, 64))
+        self.save.setIconSize(QtCore.QSize(32, 32))
         self.save.setObjectName("save")
         self.horizontalLayout.addWidget(self.save)
         spacerItem1 = QtGui.QSpacerItem(218, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.horizontalLayout_4.addWidget(self.groupBox)
         self.workLayout.addLayout(self.horizontalLayout_4)
-        self.widget = QtGui.QWidget(self.splitter)
-        self.widget.setObjectName("widget")
-        self.verticalLayout_4 = QtGui.QVBoxLayout(self.widget)
+        self.layoutWidget = QtGui.QWidget(self.splitter)
+        self.layoutWidget.setObjectName("layoutWidget")
+        self.verticalLayout_4 = QtGui.QVBoxLayout(self.layoutWidget)
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.groupBox_3 = QtGui.QGroupBox(self.widget)
+        self.groupBox_3 = QtGui.QGroupBox(self.layoutWidget)
         self.groupBox_3.setObjectName("groupBox_3")
         self.verticalLayout_2 = QtGui.QVBoxLayout(self.groupBox_3)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -101,7 +101,7 @@ class Ui_GhastlyLion(object):
         self.type.addItem("")
         self.verticalLayout_2.addWidget(self.type)
         self.verticalLayout_4.addWidget(self.groupBox_3)
-        self.groupBox_4 = QtGui.QGroupBox(self.widget)
+        self.groupBox_4 = QtGui.QGroupBox(self.layoutWidget)
         self.groupBox_4.setObjectName("groupBox_4")
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.groupBox_4)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -115,7 +115,7 @@ class Ui_GhastlyLion(object):
         icon5 = QtGui.QIcon()
         icon5.addPixmap(QtGui.QPixmap(":/main/plus.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_4.setIcon(icon5)
-        self.pushButton_4.setIconSize(QtCore.QSize(64, 64))
+        self.pushButton_4.setIconSize(QtCore.QSize(32, 32))
         self.pushButton_4.setObjectName("pushButton_4")
         self.horizontalLayout_3.addWidget(self.pushButton_4)
         self.pushButton_5 = QtGui.QPushButton(self.groupBox_4)
@@ -123,7 +123,7 @@ class Ui_GhastlyLion(object):
         icon6 = QtGui.QIcon()
         icon6.addPixmap(QtGui.QPixmap(":/main/moins.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_5.setIcon(icon6)
-        self.pushButton_5.setIconSize(QtCore.QSize(64, 64))
+        self.pushButton_5.setIconSize(QtCore.QSize(32, 32))
         self.pushButton_5.setObjectName("pushButton_5")
         self.horizontalLayout_3.addWidget(self.pushButton_5)
         spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)

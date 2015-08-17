@@ -13,12 +13,16 @@ class Circle(Figure):
         self.x = x
         self.y = y
         self.radius = radius
+        self.rx = 0
+        self.ry = 0
 
     def setPoint1(self, point):
         self.x = point.x()
         self.y = point.y()
 
     def setPoint2(self, point):
+        self.rx = point.x()
+        self.ry = point.y()
         self.radius = self.calcRadius(point)
         return True
 
@@ -31,29 +35,35 @@ class Circle(Figure):
         return radius < self.radius
 
     def isControlPoint(self, point):
-        radius = self.calcRadius(point)
-
-        dist = distance(QPoint(self.x, self.y), point)
-        return math.fabs(self.radius - radius) < Circle.CTRL / 2 or dist < Circle.CTRL / 2
+        dist1 = distance(QPoint(self.x, self.y), point)
+        dist2 = distance(QPoint(self.rx, self.ry), point)
+        return dist1 < Figure.CTRL or dist2 < Circle.CTRL
 
     def moveControlPoint(self, point):
         if self.mode is not Figure.MODE_CONTROL:
             return
 
-        dist1 = distance(QPoint(self.x, self.y), point)
+        center = QPoint(self.x, self.y)
+        dist1 = distance(center, point)
+        delta = point - center
 
         radius = self.calcRadius(point)
-        dist2 = math.fabs(self.radius - radius)
+        dist2 = distance(QPoint(self.rx, self.ry), point)
 
         if dist1 < dist2:
             self.x = point.x()
             self.y = point.y()
+            self.rx += delta.x()
+            self.ry += delta.y()
         else:
             self.radius = radius
+            self.rx = point.x()
+            self.ry = point.y()
 
     def draw(self, painter):
         painter.drawEllipse(QPoint(self.x, self.y), self.radius, self.radius)
         painter.drawEllipse(self.x - Circle.CTRL / 2, self.y - Circle.CTRL / 2, Circle.CTRL, Circle.CTRL)
+        painter.drawEllipse(self.rx - Circle.CTRL / 2, self.ry - Circle.CTRL / 2, Circle.CTRL, Circle.CTRL)
         # painter.drawEllipse(self.x2, self.y2, 3, 3)
 
     def getDict(self):

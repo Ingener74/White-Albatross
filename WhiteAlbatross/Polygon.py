@@ -1,9 +1,12 @@
 # encoding: utf8
 from PySide.QtGui import QPolygon
+from WhiteAlbatross.Figure import Figure, distance
 
 
-class Polygon(object):
+# noinspection PyPep8Naming
+class Polygon(Figure):
     def __init__(self):
+        Figure.__init__(self)
         self.points = []
 
     def setPoint1(self, point):

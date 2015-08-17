@@ -106,6 +106,8 @@ class MainWindow(QWidget, Ui_GhastlyLion):
 
 
 if __name__ == '__main__':
+    # noinspection PyTypeChecker,PyCallByClass
+    QApplication.setStyle(u'plastique')
     app = QApplication(sys.argv)
 
     main_window = MainWindow()

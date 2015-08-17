@@ -30,7 +30,7 @@ class Rectangle(Figure):
     def isControlPoint(self, point):
         dist1 = distance(QPoint(self.x1, self.y1), point)
         dist2 = distance(QPoint(self.x2, self.y2), point)
-        return dist1 < Rectangle.CTRL / 2 or dist2 < Rectangle.CTRL / 2
+        return dist1 < Rectangle.CTRL or dist2 < Rectangle.CTRL
 
     def moveControlPoint(self, point):
         if self.mode is not Figure.MODE_CONTROL:
