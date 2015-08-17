@@ -15,9 +15,6 @@ COMPANY = 'Venus.Games'
 APPNAME = 'GhastlyLion'
 
 
-# Aberrant Tiger
-
-
 class MainWindow(QWidget, Ui_GhastlyLion):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
@@ -90,6 +87,7 @@ class MainWindow(QWidget, Ui_GhastlyLion):
     def on_figures_changed(self, figures):
         self.figures.clear()
         self.figures.addItems([str(figure) for figure in figures])
+        # self.white_albatross.save()
 
     def figures_context_menu(self, point):
         print point
