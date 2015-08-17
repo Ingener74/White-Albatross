@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:/Users/Pavel/workspace/White-Albatross/GhastlyLion/GhastlyLion.ui'
 #
-# Created: Mon Aug 17 22:43:41 2015
+# Created: Mon Aug 17 23:55:35 2015
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -101,6 +101,15 @@ class Ui_GhastlyLion(object):
         self.type.addItem("")
         self.verticalLayout_2.addWidget(self.type)
         self.verticalLayout_4.addWidget(self.groupBox_3)
+        self.groupBox_5 = QtGui.QGroupBox(self.widget)
+        self.groupBox_5.setObjectName("groupBox_5")
+        self.verticalLayout_6 = QtGui.QVBoxLayout(self.groupBox_5)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.comboBox = QtGui.QComboBox(self.groupBox_5)
+        self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItem("")
+        self.verticalLayout_6.addWidget(self.comboBox)
+        self.verticalLayout_4.addWidget(self.groupBox_5)
         self.groupBox_4 = QtGui.QGroupBox(self.widget)
         self.groupBox_4.setObjectName("groupBox_4")
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.groupBox_4)
@@ -143,10 +152,12 @@ class Ui_GhastlyLion(object):
         self.removeImages.setToolTip(QtGui.QApplication.translate("GhastlyLion", "Убрать файлы", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setTitle(QtGui.QApplication.translate("GhastlyLion", "Инструменты", None, QtGui.QApplication.UnicodeUTF8))
         self.save.setToolTip(QtGui.QApplication.translate("GhastlyLion", "Сохранить полигоны", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_3.setTitle(QtGui.QApplication.translate("GhastlyLion", "Тип", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_3.setTitle(QtGui.QApplication.translate("GhastlyLion", "Тип фигуры", None, QtGui.QApplication.UnicodeUTF8))
         self.type.setItemText(0, QtGui.QApplication.translate("GhastlyLion", "Полигон", None, QtGui.QApplication.UnicodeUTF8))
         self.type.setItemText(1, QtGui.QApplication.translate("GhastlyLion", "Прямоугольник", None, QtGui.QApplication.UnicodeUTF8))
         self.type.setItemText(2, QtGui.QApplication.translate("GhastlyLion", "Круг", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_5.setTitle(QtGui.QApplication.translate("GhastlyLion", "Алгоритм декомпозици полигона", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox.setItemText(0, QtGui.QApplication.translate("GhastlyLion", "Mark Bayazit\'s Algorithm", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_4.setTitle(QtGui.QApplication.translate("GhastlyLion", "Физические формы", None, QtGui.QApplication.UnicodeUTF8))
 
 import resources_rc

@@ -11,6 +11,8 @@ class Polygon(Figure):
         Figure.__init__(self)
         self.points = []
 
+        self.convex_polygons = []
+
     def setPoint1(self, point):
         self.points.append(Point(point.x(), point.y()))
 
@@ -46,10 +48,7 @@ class Polygon(Figure):
         pass
 
     def getDict(self):
-        return {
-            'polygon': {
-            }
-        }
+        return {'polygon': {'editor': [point.getDict() for point in self.points]}}
 
     def __str__(self):
         return self.__repr__()

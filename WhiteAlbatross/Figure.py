@@ -35,5 +35,11 @@ class Figure(object):
     def isControlPoint(self, point):
         raise NotImplementedError
 
+    def moveControlPoint(self, point):
+        raise NotImplementedError
+
     def draw(self, painter):
+        raise NotImplementedError
+
+    def getDict(self):
         raise NotImplementedError
