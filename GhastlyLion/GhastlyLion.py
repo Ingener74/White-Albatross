@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'GhastlyLion/GhastlyLion.ui'
+# Form implementation generated from reading ui file 'C:/Users/Pavel/workspace/White-Albatross/GhastlyLion/GhastlyLion.ui'
 #
-# Created: Mon Aug 17 09:02:16 2015
+# Created: Mon Aug 17 22:43:41 2015
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -81,16 +81,16 @@ class Ui_GhastlyLion(object):
         self.save.setIconSize(QtCore.QSize(32, 32))
         self.save.setObjectName("save")
         self.horizontalLayout.addWidget(self.save)
-        spacerItem1 = QtGui.QSpacerItem(218, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem1 = QtGui.QSpacerItem(250, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.horizontalLayout_4.addWidget(self.groupBox)
         self.workLayout.addLayout(self.horizontalLayout_4)
-        self.layoutWidget = QtGui.QWidget(self.splitter)
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.verticalLayout_4 = QtGui.QVBoxLayout(self.layoutWidget)
+        self.widget = QtGui.QWidget(self.splitter)
+        self.widget.setObjectName("widget")
+        self.verticalLayout_4 = QtGui.QVBoxLayout(self.widget)
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.groupBox_3 = QtGui.QGroupBox(self.layoutWidget)
+        self.groupBox_3 = QtGui.QGroupBox(self.widget)
         self.groupBox_3.setObjectName("groupBox_3")
         self.verticalLayout_2 = QtGui.QVBoxLayout(self.groupBox_3)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -101,7 +101,7 @@ class Ui_GhastlyLion(object):
         self.type.addItem("")
         self.verticalLayout_2.addWidget(self.type)
         self.verticalLayout_4.addWidget(self.groupBox_3)
-        self.groupBox_4 = QtGui.QGroupBox(self.layoutWidget)
+        self.groupBox_4 = QtGui.QGroupBox(self.widget)
         self.groupBox_4.setObjectName("groupBox_4")
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.groupBox_4)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -136,7 +136,7 @@ class Ui_GhastlyLion(object):
         QtCore.QMetaObject.connectSlotsByName(GhastlyLion)
 
     def retranslateUi(self, GhastlyLion):
-        GhastlyLion.setWindowTitle(QtGui.QApplication.translate("GhastlyLion", "Жуткий лев - рисователь физических форм для Box2D", None, QtGui.QApplication.UnicodeUTF8))
+        GhastlyLion.setWindowTitle(QtGui.QApplication.translate("GhastlyLion", "Жуткий лев - редактор физических форм для Box2D", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("GhastlyLion", "Файлы", None, QtGui.QApplication.UnicodeUTF8))
         self.addImages.setToolTip(QtGui.QApplication.translate("GhastlyLion", "Добавить файлы", None, QtGui.QApplication.UnicodeUTF8))
         self.openFolder.setToolTip(QtGui.QApplication.translate("GhastlyLion", "Открыть директорию", None, QtGui.QApplication.UnicodeUTF8))

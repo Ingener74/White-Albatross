@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Жуткий лев - рисователь физических форм для Box2D</string>
+   <string>Жуткий лев - редактор физических форм для Box2D</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
@@ -165,7 +165,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>218</width>
+                <width>250</width>
                 <height>20</height>
                </size>
               </property>
@@ -178,7 +178,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="">
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QGroupBox" name="groupBox_3">
