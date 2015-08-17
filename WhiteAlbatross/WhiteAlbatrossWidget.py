@@ -47,8 +47,10 @@ class WhiteAlbatrossWidget(QWidget):
                         self.update()
                         return
 
-        self.figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()
-        if self.figure:
+        if not self.figure:
+            self.figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()
+            self.figure.setPoint1(e.pos())
+        else:
             self.figure.setPoint1(e.pos())
 
     def mouseMoveEvent(self, e):
