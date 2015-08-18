@@ -15,12 +15,6 @@ class FirstPoint(State):
         machine.state = SecondPoint()
         return True
 
-    def mouseMove(self, point, machine):
-        pass
-
-    def mouseUp(self, point, machine):
-        pass
-
 
 class SecondPoint(State):
     def __init__(self):
@@ -45,12 +39,21 @@ class Control(State):
         self.point = None
 
     def mouseDown(self, point, machine):
-        # if distance(poi)
-        return True
+        if distance(machine.p1, point) < Figure.CTRL:
+            self.point = machine.p1
+        if distance(machine.p2, point) < Figure.CTRL:
+            self.point = machine.p2
+        if self.point:
+            self.point.setX(point.x())
+            self.point.setY(point.y())
+            return True
+        else:
+            return False
 
     def mouseMove(self, point, machine):
         if self.point:
-            self.point = point
+            self.point.setX(point.x())
+            self.point.setY(point.y())
 
     def mouseUp(self, point, machine):
         self.point = None
@@ -73,10 +76,10 @@ class Rectangle(Figure):
         # painter_path.addRect(self.x1, self.y1, self.x2, self.y2)
         # painter.drawPath(painter_path)
 
-        if self.p1.x() and self.p1.y() and self.p2.x() and self.p2.y():
+        if not self.p1.isNull() and not self.p2.isNull():
             painter.drawRect(QRect(self.p1, self.p2))
-            painter.drawEllipse(self.p1.x() - Figure.CTRL / 2, self.p1.y() - Figure.CTRL / 2, Figure.CTRL, Figure.CTRL)
-            painter.drawEllipse(self.p2.x() - Figure.CTRL / 2, self.p2.y() - Figure.CTRL / 2, Figure.CTRL, Figure.CTRL)
+            painter.drawEllipse(self.p1, Figure.CTRL, Figure.CTRL)
+            painter.drawEllipse(self.p2, Figure.CTRL, Figure.CTRL)
 
     def getDict(self):
         return {
