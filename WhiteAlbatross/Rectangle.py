@@ -30,7 +30,7 @@ class SecondPoint(State):
     def mouseDown(self, point, machine):
         machine.x2 = point.x()
         machine.y2 = point.y()
-        return True
+        return False
 
     def mouseMove(self, point, machine):
         machine.x2 = point.x()
@@ -105,9 +105,10 @@ class Rectangle(Figure):
         # painter_path.addRect(self.x1, self.y1, self.x2, self.y2)
         # painter.drawPath(painter_path)
 
-        painter.drawRect(QRect(QPoint(self.x1, self.y1), QPoint(self.x2, self.y2)))
-        painter.drawEllipse(self.x1 - Rectangle.CTRL / 2, self.y1 - Rectangle.CTRL / 2, Rectangle.CTRL, Rectangle.CTRL)
-        painter.drawEllipse(self.x2 - Rectangle.CTRL / 2, self.y2 - Rectangle.CTRL / 2, Rectangle.CTRL, Rectangle.CTRL)
+        if self.x1 and self.y1 and self.x2 and self.y2:
+            painter.drawRect(QRect(QPoint(self.x1, self.y1), QPoint(self.x2, self.y2)))
+            painter.drawEllipse(self.x1 - Rectangle.CTRL / 2, self.y1 - Rectangle.CTRL / 2, Rectangle.CTRL, Rectangle.CTRL)
+            painter.drawEllipse(self.x2 - Rectangle.CTRL / 2, self.y2 - Rectangle.CTRL / 2, Rectangle.CTRL, Rectangle.CTRL)
 
     def getDict(self):
         return {

@@ -58,9 +58,11 @@ class WhiteAlbatrossWidget(QWidget):
                 if figure.mouseDown(e.pos()):
                     return
 
-        new_figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()
-        new_figure.mouseDown(e.pos())
-        self.image.addFigure(new_figure)
+            new_figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()
+            new_figure.mouseDown(e.pos())
+            self.image.addFigure(new_figure)
+            self.update()
+            self.figuresChanged.emit(self.image.figures)
 
     def mouseMoveEvent(self, e):
         # if self.image:
@@ -77,6 +79,8 @@ class WhiteAlbatrossWidget(QWidget):
         if self.image:
             for figure in self.image.figures:
                 figure.mouseMove(e.pos())
+
+            self.update()
 
     def mouseReleaseEvent(self, e):
         # if self.image:
@@ -97,6 +101,8 @@ class WhiteAlbatrossWidget(QWidget):
         if self.image:
             for figure in self.image.figures:
                 figure.mouseUp(e.pos())
+            self.update()
+            self.figuresChanged.emit(self.image.figures)
 
     def wheelEvent(self, e):
         self.scale += e.delta() / 1200.0
@@ -112,7 +118,7 @@ class WhiteAlbatrossWidget(QWidget):
                          QBrush(QImage(':/main/background.png')))
 
         painter.setTransform(QTransform().scale(self.scale, self.scale))
-        if self.image is not None:
+        if self.image:
             old_pen = painter.pen()
 
             new_pen = QPen()
