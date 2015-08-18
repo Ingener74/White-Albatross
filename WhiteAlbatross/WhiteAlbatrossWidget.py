@@ -33,71 +33,27 @@ class WhiteAlbatrossWidget(QWidget):
         self.images = []
 
         self.image = None
-        self.figure = None
         self.scale = 1.0
 
     def mousePressEvent(self, e):
-
-        # if self.image:
-        #     for figure in self.image.figures:
-        #         if figure:
-        #             if figure.isControlPoint(e.pos()):
-        #                 figure.setMode(Figure.MODE_CONTROL)
-        #                 figure.moveControlPoint(e.pos())
-        #                 self.update()
-        #                 return
-        #
-        # if not self.figure:
-        #     self.figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()
-        #     self.figure.setPoint1(e.pos())
-        # else:
-        #     self.figure.setPoint1(e.pos())
-
         if self.image:
             for figure in self.image.figures:
                 if figure.mouseDown(e.pos()):
-                    return
-
-            new_figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()
-            new_figure.mouseDown(e.pos())
-            self.image.addFigure(new_figure)
+                    break
+            else:
+                new_figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()
+                new_figure.mouseDown(e.pos())
+                self.image.addFigure(new_figure)
+                self.figuresChanged.emit(self.image.figures)
             self.update()
-            self.figuresChanged.emit(self.image.figures)
 
     def mouseMoveEvent(self, e):
-        # if self.image:
-        #     for figure in self.image.figures:
-        #         if figure:
-        #             if figure.getMode() is Figure.MODE_CONTROL:
-        #                 figure.moveControlPoint(e.pos())
-        #                 self.update()
-        #                 return
-        # if self.figure:
-        #     self.figure.setPoint2(e.pos())
-        #     self.update()
-
         if self.image:
             for figure in self.image.figures:
                 figure.mouseMove(e.pos())
-
             self.update()
 
     def mouseReleaseEvent(self, e):
-        # if self.image:
-        #     for figure in self.image.figures:
-        #         if figure:
-        #             if figure.getMode() is Figure.MODE_CONTROL:
-        #                 figure.moveControlPoint(e.pos())
-        #                 figure.setMode(Figure.MODE_NORMAL)
-        #                 self.update()
-        #                 return
-        # if self.figure:
-        #     if self.figure.setPoint2(e.pos()) and self.image:
-        #         self.image.addFigure(self.figure)
-        #         self.figuresChanged.emit(self.image.figures)
-        #         self.figure = None
-        # self.update()
-
         if self.image:
             for figure in self.image.figures:
                 figure.mouseUp(e.pos())
@@ -128,9 +84,6 @@ class WhiteAlbatrossWidget(QWidget):
             self.image.draw(painter)
 
             painter.setPen(old_pen)
-
-        if self.figure:
-            self.figure.draw(painter)
 
     def addImages(self, directory, images):
         self.directory = directory

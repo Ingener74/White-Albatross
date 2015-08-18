@@ -30,7 +30,7 @@ class SecondPoint(State):
     def mouseDown(self, point, machine):
         machine.x2 = point.x()
         machine.y2 = point.y()
-        return False
+        return True
 
     def mouseMove(self, point, machine):
         machine.x2 = point.x()
@@ -39,7 +39,8 @@ class SecondPoint(State):
     def mouseUp(self, point, machine):
         machine.x2 = point.x()
         machine.y2 = point.y()
-        machine.state = Control()
+        if distance(QPoint(machine.x1, machine.y1), point) > Figure.CTRL:
+            machine.state = Control()
 
 
 class Control(State):
@@ -47,7 +48,7 @@ class Control(State):
         State.__init__(self)
 
     def mouseDown(self, point, machine):
-        return False
+        return True
 
     def mouseMove(self, point, machine):
         pass
