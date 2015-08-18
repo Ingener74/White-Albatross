@@ -3,12 +3,63 @@ from PySide.QtCore import QRect, QPoint
 from PySide.QtGui import QPainterPath, QPen, QBrush, QColor
 
 from WhiteAlbatross.Figure import distance, Figure
+from WhiteAlbatross.State import State
+
+
+class FirstPoint(State):
+    def __init__(self):
+        State.__init__(self)
+
+    def mouseDown(self, point, machine):
+        machine.x1 = point.x()
+        machine.y1 = point.y()
+        machine.state = SecondPoint()
+        return True
+
+    def mouseMove(self, point, machine):
+        pass
+
+    def mouseUp(self, point, machine):
+        pass
+
+
+class SecondPoint(State):
+    def __init__(self):
+        State.__init__(self)
+
+    def mouseDown(self, point, machine):
+        machine.x2 = point.x()
+        machine.y2 = point.y()
+        return True
+
+    def mouseMove(self, point, machine):
+        machine.x2 = point.x()
+        machine.y2 = point.y()
+
+    def mouseUp(self, point, machine):
+        machine.x2 = point.x()
+        machine.y2 = point.y()
+        machine.state = Control()
+
+
+class Control(State):
+    def __init__(self):
+        State.__init__(self)
+
+    def mouseDown(self, point, machine):
+        return False
+
+    def mouseMove(self, point, machine):
+        pass
+
+    def mouseUp(self, point, machine):
+        pass
 
 
 # noinspection PyPep8Naming
 class Rectangle(Figure):
     def __init__(self, x1=0, y1=0, x2=0, y2=0):
-        Figure.__init__(self)
+        Figure.__init__(self, FirstPoint())
         self.x1 = x1
         self.y1 = y1
         self.x2 = x2

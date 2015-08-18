@@ -38,48 +38,65 @@ class WhiteAlbatrossWidget(QWidget):
 
     def mousePressEvent(self, e):
 
+        # if self.image:
+        #     for figure in self.image.figures:
+        #         if figure:
+        #             if figure.isControlPoint(e.pos()):
+        #                 figure.setMode(Figure.MODE_CONTROL)
+        #                 figure.moveControlPoint(e.pos())
+        #                 self.update()
+        #                 return
+        #
+        # if not self.figure:
+        #     self.figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()
+        #     self.figure.setPoint1(e.pos())
+        # else:
+        #     self.figure.setPoint1(e.pos())
+
         if self.image:
             for figure in self.image.figures:
-                if figure:
-                    if figure.isControlPoint(e.pos()):
-                        figure.setMode(Figure.MODE_CONTROL)
-                        figure.moveControlPoint(e.pos())
-                        self.update()
-                        return
+                if figure.mouseDown(e.pos()):
+                    return
 
-        if not self.figure:
-            self.figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()
-            self.figure.setPoint1(e.pos())
-        else:
-            self.figure.setPoint1(e.pos())
+        new_figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()
+        new_figure.mouseDown(e.pos())
+        self.image.addFigure(new_figure)
 
     def mouseMoveEvent(self, e):
+        # if self.image:
+        #     for figure in self.image.figures:
+        #         if figure:
+        #             if figure.getMode() is Figure.MODE_CONTROL:
+        #                 figure.moveControlPoint(e.pos())
+        #                 self.update()
+        #                 return
+        # if self.figure:
+        #     self.figure.setPoint2(e.pos())
+        #     self.update()
+
         if self.image:
             for figure in self.image.figures:
-                if figure:
-                    if figure.getMode() is Figure.MODE_CONTROL:
-                        figure.moveControlPoint(e.pos())
-                        self.update()
-                        return
-        if self.figure:
-            self.figure.setPoint2(e.pos())
-            self.update()
+                figure.mouseMove(e.pos())
 
     def mouseReleaseEvent(self, e):
+        # if self.image:
+        #     for figure in self.image.figures:
+        #         if figure:
+        #             if figure.getMode() is Figure.MODE_CONTROL:
+        #                 figure.moveControlPoint(e.pos())
+        #                 figure.setMode(Figure.MODE_NORMAL)
+        #                 self.update()
+        #                 return
+        # if self.figure:
+        #     if self.figure.setPoint2(e.pos()) and self.image:
+        #         self.image.addFigure(self.figure)
+        #         self.figuresChanged.emit(self.image.figures)
+        #         self.figure = None
+        # self.update()
+
         if self.image:
             for figure in self.image.figures:
-                if figure:
-                    if figure.getMode() is Figure.MODE_CONTROL:
-                        figure.moveControlPoint(e.pos())
-                        figure.setMode(Figure.MODE_NORMAL)
-                        self.update()
-                        return
-        if self.figure:
-            if self.figure.setPoint2(e.pos()) and self.image:
-                self.image.addFigure(self.figure)
-                self.figuresChanged.emit(self.image.figures)
-                self.figure = None
-        self.update()
+                figure.mouseUp(e.pos())
 
     def wheelEvent(self, e):
         self.scale += e.delta() / 1200.0
