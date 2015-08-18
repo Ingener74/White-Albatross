@@ -7,6 +7,8 @@ from PySide.QtGui import QApplication, QWidget, QFileDialog
 from WhiteAlbatross import WhiteAlbatrossWidget
 from GhastlyLion import Ui_GhastlyLion
 
+SELECTED_IMAGE = 'selected_image'
+
 SPLITTER = 'splitter'
 LAST_FIGURE_TYPE = 'last_figure_type'
 CURRENT_DIRECTORY = 'current_directory'
@@ -44,6 +46,10 @@ class MainWindow(QWidget, Ui_GhastlyLion):
 
         if self.current_directory:
             self.open_folder()
+
+        # self.imagesList.setCurrentItem(self.imagesList.takeItem(
+        #     int(self.settings.value(SELECTED_IMAGE, defaultValue=0))
+        # ))
 
     def add_images_click(self):
         file_names, selected_filters = QFileDialog.getOpenFileNames(parent=self,
@@ -101,6 +107,7 @@ class MainWindow(QWidget, Ui_GhastlyLion):
         self.settings.setValue(SPLITTER, self.splitter.saveState())
         self.settings.setValue(CURRENT_DIRECTORY, self.current_directory)
         self.settings.setValue(LAST_FIGURE_TYPE, self.type.currentIndex())
+        # self.settings.setValue(SELECTED_IMAGE, self.imagesList.currentRow())
 
 
 if __name__ == '__main__':

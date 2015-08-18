@@ -3,6 +3,7 @@ from PySide.QtGui import QPolygon
 
 from WhiteAlbatross.Figure import Figure, distance
 from WhiteAlbatross.State import State
+from WhiteAlbatross.BayazitDecomposer import BayazitDecomposer
 
 
 def qpoint2dict(point):
@@ -23,6 +24,10 @@ class AddPoint(State):
                 return True
         if len(machine.points) > 2 and distance(machine.points[0], event.pos()) < Figure.CTRL:
             machine.points.append(machine.points[0])
+
+            # Decompose
+            machine.convex_polygons = machine.decomposer.decompose(machine.points)
+
             machine.state = machine.control
         else:
             machine.points.append(event.pos())
@@ -54,6 +59,9 @@ class Control(State):
             self.control1.setY(event.pos().y())
 
     def mouseUp(self, event, machine):
+        # Decompose
+        machine.convex_polygons = machine.decomposer.decompose(machine.points)
+
         self.control1 = None
 
 
@@ -65,17 +73,25 @@ class Polygon(Figure):
         self.control = Control()
 
         Figure.__init__(self, self.add_point)
+
+        self.decomposer = BayazitDecomposer()
+
         self.points = []
 
         self.convex_polygons = []
 
     def draw(self, painter):
         painter.drawPolygon(QPolygon(self.points))
+
+        for poly in self.convex_polygons:
+            painter.drawPolygon(QPolygon(poly))
+
         for point in self.points:
             painter.drawEllipse(point, Figure.CTRL, Figure.CTRL)
 
     def getDict(self):
-        return {'polygon': {'editor': [qpoint2dict(point) for point in self.points]}}
+        return {'polygon': {'editor': [qpoint2dict(point) for point in self.points],
+                            'convex': [qpoint2dict(point) for convex in self.convex_polygons for point in convex]}}
 
     def __str__(self):
         return self.__repr__()

@@ -9,4 +9,4 @@ class BayazitDecomposer(object):
         pass
 
     def decompose(self, polygon):
-        return polygon
+        return [[point for point in polygon]]
