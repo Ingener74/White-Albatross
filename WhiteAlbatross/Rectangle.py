@@ -11,8 +11,7 @@ class FirstPoint(State):
         State.__init__(self)
 
     def mouseDown(self, point, machine):
-        machine.x1 = point.x()
-        machine.y1 = point.y()
+        machine.p1 = point
         machine.state = SecondPoint()
         return True
 
@@ -28,73 +27,41 @@ class SecondPoint(State):
         State.__init__(self)
 
     def mouseDown(self, point, machine):
-        machine.x2 = point.x()
-        machine.y2 = point.y()
+        machine.p2 = point
         return True
 
     def mouseMove(self, point, machine):
-        machine.x2 = point.x()
-        machine.y2 = point.y()
+        machine.p2 = point
 
     def mouseUp(self, point, machine):
-        machine.x2 = point.x()
-        machine.y2 = point.y()
-        if distance(QPoint(machine.x1, machine.y1), point) > Figure.CTRL:
+        machine.p2 = point
+        if distance(machine.p1, point) > Figure.CTRL:
             machine.state = Control()
 
 
 class Control(State):
     def __init__(self):
         State.__init__(self)
+        self.point = None
 
     def mouseDown(self, point, machine):
+        # if distance(poi)
         return True
 
     def mouseMove(self, point, machine):
-        pass
+        if self.point:
+            self.point = point
 
     def mouseUp(self, point, machine):
-        pass
+        self.point = None
 
 
 # noinspection PyPep8Naming
 class Rectangle(Figure):
     def __init__(self, x1=0, y1=0, x2=0, y2=0):
         Figure.__init__(self, FirstPoint())
-        self.x1 = x1
-        self.y1 = y1
-        self.x2 = x2
-        self.y2 = y2
-
-    def setPoint1(self, point):
-        self.x1 = point.x()
-        self.y1 = point.y()
-
-    def setPoint2(self, point):
-        self.x2 = point.x()
-        self.y2 = point.y()
-        return True
-
-    def inSide(self, point):
-        return max(self.x1, self.x2) > point.x() > min(self.x1, self.x2) and \
-               max(self.y1, self.y2) > point.y() > min(self.y1, self.y2)
-
-    def isControlPoint(self, point):
-        dist1 = distance(QPoint(self.x1, self.y1), point)
-        dist2 = distance(QPoint(self.x2, self.y2), point)
-        return dist1 < Rectangle.CTRL or dist2 < Rectangle.CTRL
-
-    def moveControlPoint(self, point):
-        if self.mode is not Figure.MODE_CONTROL:
-            return
-        dist1 = distance(QPoint(self.x1, self.y1), point)
-        dist2 = distance(QPoint(self.x2, self.y2), point)
-        if dist1 < dist2:
-            self.x1 = point.x()
-            self.y1 = point.y()
-        else:
-            self.x2 = point.x()
-            self.y2 = point.y()
+        self.p1 = QPoint(x1, y1)
+        self.p2 = QPoint(x2, y2)
 
     def draw(self, painter):
 
@@ -106,18 +73,18 @@ class Rectangle(Figure):
         # painter_path.addRect(self.x1, self.y1, self.x2, self.y2)
         # painter.drawPath(painter_path)
 
-        if self.x1 and self.y1 and self.x2 and self.y2:
-            painter.drawRect(QRect(QPoint(self.x1, self.y1), QPoint(self.x2, self.y2)))
-            painter.drawEllipse(self.x1 - Rectangle.CTRL / 2, self.y1 - Rectangle.CTRL / 2, Rectangle.CTRL, Rectangle.CTRL)
-            painter.drawEllipse(self.x2 - Rectangle.CTRL / 2, self.y2 - Rectangle.CTRL / 2, Rectangle.CTRL, Rectangle.CTRL)
+        if self.p1.x() and self.p1.y() and self.p2.x() and self.p2.y():
+            painter.drawRect(QRect(self.p1, self.p2))
+            painter.drawEllipse(self.p1.x() - Figure.CTRL / 2, self.p1.y() - Figure.CTRL / 2, Figure.CTRL, Figure.CTRL)
+            painter.drawEllipse(self.p2.x() - Figure.CTRL / 2, self.p2.y() - Figure.CTRL / 2, Figure.CTRL, Figure.CTRL)
 
     def getDict(self):
         return {
             'rect': {
-                'x1': self.x1,
-                'y1': self.y1,
-                'x2': self.x2,
-                'y2': self.y2
+                'x1': self.p1.x(),
+                'y1': self.p1.y(),
+                'x2': self.p2.x(),
+                'y2': self.p2.y()
             }
         }
 
@@ -125,4 +92,7 @@ class Rectangle(Figure):
         return self.__repr__()
 
     def __repr__(self):
-        return 'Rectangle(({x1}, {y1}), ({x2}, {y2}))'.format(x1=self.x1, y1=self.y1, x2=self.x2, y2=self.y2)
+        return 'Rectangle(({x1}, {y1}), ({x2}, {y2}))'.format(x1=self.p1.x(),
+                                                              y1=self.p1.y(),
+                                                              x2=self.p2.x(),
+                                                              y2=self.p2.y())
