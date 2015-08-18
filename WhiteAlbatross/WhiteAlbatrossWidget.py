@@ -5,7 +5,6 @@ from PySide.QtCore import Signal, QDir
 from PySide.QtGui import QWidget, QPainter, QSizePolicy, QPen, QColor, QTransform, QBrush, QImage, QPainterPath
 
 from WhiteAlbatross.Image import Image
-from WhiteAlbatross.Figure import Figure
 from WhiteAlbatross.Rectangle import Rectangle
 from WhiteAlbatross.Circle import Circle
 from WhiteAlbatross.Polygon import Polygon
@@ -38,11 +37,11 @@ class WhiteAlbatrossWidget(QWidget):
     def mousePressEvent(self, e):
         if self.image:
             for figure in self.image.figures:
-                if figure.mouseDown(e.pos()):
+                if figure.mouseDown(e):
                     break
             else:
                 new_figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()
-                new_figure.mouseDown(e.pos())
+                new_figure.mouseDown(e)
                 self.image.addFigure(new_figure)
                 self.figuresChanged.emit(self.image.figures)
             self.update()
@@ -50,13 +49,13 @@ class WhiteAlbatrossWidget(QWidget):
     def mouseMoveEvent(self, e):
         if self.image:
             for figure in self.image.figures:
-                figure.mouseMove(e.pos())
+                figure.mouseMove(e)
             self.update()
 
     def mouseReleaseEvent(self, e):
         if self.image:
             for figure in self.image.figures:
-                figure.mouseUp(e.pos())
+                figure.mouseUp(e)
             self.update()
             self.figuresChanged.emit(self.image.figures)
 

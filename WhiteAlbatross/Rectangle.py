@@ -10,9 +10,9 @@ class FirstPoint(State):
     def __init__(self):
         State.__init__(self)
 
-    def mouseDown(self, point, machine):
-        machine.p1 = point
-        machine.state = SecondPoint()
+    def mouseDown(self, event, machine):
+        machine.p1 = event.pos()
+        machine.state = machine.second_point
         return True
 
 
@@ -20,17 +20,17 @@ class SecondPoint(State):
     def __init__(self):
         State.__init__(self)
 
-    def mouseDown(self, point, machine):
-        machine.p2 = point
+    def mouseDown(self, event, machine):
+        machine.p2 = event.pos()
         return True
 
-    def mouseMove(self, point, machine):
-        machine.p2 = point
+    def mouseMove(self, event, machine):
+        machine.p2 = event.pos()
 
-    def mouseUp(self, point, machine):
-        machine.p2 = point
-        if distance(machine.p1, point) > Figure.CTRL:
-            machine.state = Control()
+    def mouseUp(self, event, machine):
+        machine.p2 = event.pos()
+        if distance(machine.p1, event.pos()) > Figure.CTRL:
+            machine.state = machine.control
 
 
 class Control(State):
@@ -38,31 +38,36 @@ class Control(State):
         State.__init__(self)
         self.point = None
 
-    def mouseDown(self, point, machine):
-        if distance(machine.p1, point) < Figure.CTRL:
+    def mouseDown(self, event, machine):
+        if distance(machine.p1, event.pos()) < Figure.CTRL:
             self.point = machine.p1
-        if distance(machine.p2, point) < Figure.CTRL:
+        if distance(machine.p2, event.pos()) < Figure.CTRL:
             self.point = machine.p2
         if self.point:
-            self.point.setX(point.x())
-            self.point.setY(point.y())
+            self.point.setX(event.pos().x())
+            self.point.setY(event.pos().y())
             return True
         else:
             return False
 
-    def mouseMove(self, point, machine):
+    def mouseMove(self, event, machine):
         if self.point:
-            self.point.setX(point.x())
-            self.point.setY(point.y())
+            self.point.setX(event.pos().x())
+            self.point.setY(event.pos().y())
 
-    def mouseUp(self, point, machine):
+    def mouseUp(self, event, machine):
         self.point = None
 
 
 # noinspection PyPep8Naming
 class Rectangle(Figure):
     def __init__(self, x1=0, y1=0, x2=0, y2=0):
-        Figure.__init__(self, FirstPoint())
+
+        self.first_point = FirstPoint()
+        self.second_point = SecondPoint()
+        self.control = Control()
+
+        Figure.__init__(self, self.first_point)
         self.p1 = QPoint(x1, y1)
         self.p2 = QPoint(x2, y2)
 

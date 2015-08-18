@@ -17,15 +17,15 @@ class AddPoint(State):
     def __init__(self):
         State.__init__(self)
 
-    def mouseDown(self, point, machine):
+    def mouseDown(self, event, machine):
         for p in machine.points:
-            if distance(p, point) < Figure.CTRL and p is not machine.points[0]:
+            if distance(p, event.pos()) < Figure.CTRL and p is not machine.points[0]:
                 return True
-        if len(machine.points) > 2 and distance(machine.points[0], point) < Figure.CTRL:
+        if len(machine.points) > 2 and distance(machine.points[0], event.pos()) < Figure.CTRL:
             machine.points.append(machine.points[0])
             machine.state = machine.control
         else:
-            machine.points.append(point)
+            machine.points.append(event.pos())
         return True
 
     def mouseMove(self, point, machine):
@@ -41,19 +41,19 @@ class Control(State):
 
         self.control1 = None
 
-    def mouseDown(self, point, machine):
+    def mouseDown(self, event, machine):
         for p in machine.points:
-            if distance(p, point) < Figure.CTRL:
+            if distance(p, event.pos()) < Figure.CTRL:
                 self.control1 = p
                 return True
         return False
 
-    def mouseMove(self, point, machine):
+    def mouseMove(self, event, machine):
         if self.control1:
-            self.control1.setX(point.x())
-            self.control1.setY(point.y())
+            self.control1.setX(event.pos().x())
+            self.control1.setY(event.pos().y())
 
-    def mouseUp(self, point, machine):
+    def mouseUp(self, event, machine):
         self.control1 = None
 
 
