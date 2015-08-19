@@ -7,6 +7,9 @@ from WhiteAlbatross.State import State
 
 
 class FirstPoint(State):
+    """
+    Состояние для установки первой точки
+    """
     def __init__(self):
         State.__init__(self)
 
@@ -17,6 +20,9 @@ class FirstPoint(State):
 
 
 class SecondPoint(State):
+    """
+    Состояние для установки второй точки
+    """
     def __init__(self):
         State.__init__(self)
 
@@ -29,21 +35,28 @@ class SecondPoint(State):
 
     def mouseUp(self, event, machine):
         machine.ctrl = event.pos()
-        if distance(machine.center, event.pos()) > Figure.CTRL:
+        if distance(machine.center, event.pos()) > Figure.CTRL_RADIUS:
             machine.state = machine.control
 
 
 class Control(State):
+    """
+    Состояние для перемещения точек круга
+    """
     def __init__(self):
         State.__init__(self)
         self.point = None
 
     def mouseDown(self, event, machine):
-        if distance(machine.center, event.pos()) < Figure.CTRL:
+        if distance(machine.center, event.pos()) < Figure.CTRL_RADIUS:
             self.point = machine.center
-        if distance(machine.ctrl, event.pos()) < Figure.CTRL:
+        if distance(machine.ctrl, event.pos()) < Figure.CTRL_RADIUS:
             self.point = machine.ctrl
-        if self.point:
+        if self.point and self.point == machine.center:
+            delta = event.pos() - self.point
+            machine.center += delta
+            machine.ctrl += delta
+        elif self.point and self.point == machine.ctrl:
             self.point.setX(event.pos().x())
             self.point.setY(event.pos().y())
             return True
@@ -75,8 +88,8 @@ class Circle(Figure):
         if not self.center.isNull() and not self.ctrl.isNull():
             radius = distance(self.center, self.ctrl)
             painter.drawEllipse(self.center, radius, radius)
-            painter.drawEllipse(self.center, Figure.CTRL, Figure.CTRL)
-            painter.drawEllipse(self.ctrl, Figure.CTRL, Figure.CTRL)
+            painter.drawEllipse(self.center, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
+            painter.drawEllipse(self.ctrl, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
 
     def getDict(self):
         return {

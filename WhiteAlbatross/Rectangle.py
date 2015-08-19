@@ -29,7 +29,7 @@ class SecondPoint(State):
 
     def mouseUp(self, event, machine):
         machine.p2 = event.pos()
-        if distance(machine.p1, event.pos()) > Figure.CTRL:
+        if distance(machine.p1, event.pos()) > Figure.CTRL_RADIUS:
             machine.state = machine.control
 
 
@@ -39,9 +39,9 @@ class Control(State):
         self.point = None
 
     def mouseDown(self, event, machine):
-        if distance(machine.p1, event.pos()) < Figure.CTRL:
+        if distance(machine.p1, event.pos()) < Figure.CTRL_RADIUS:
             self.point = machine.p1
-        if distance(machine.p2, event.pos()) < Figure.CTRL:
+        if distance(machine.p2, event.pos()) < Figure.CTRL_RADIUS:
             self.point = machine.p2
         if self.point:
             self.point.setX(event.pos().x())
@@ -83,8 +83,8 @@ class Rectangle(Figure):
 
         if not self.p1.isNull() and not self.p2.isNull():
             painter.drawRect(QRect(self.p1, self.p2))
-            painter.drawEllipse(self.p1, Figure.CTRL, Figure.CTRL)
-            painter.drawEllipse(self.p2, Figure.CTRL, Figure.CTRL)
+            painter.drawEllipse(self.p1, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
+            painter.drawEllipse(self.p2, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
 
     def getDict(self):
         return {

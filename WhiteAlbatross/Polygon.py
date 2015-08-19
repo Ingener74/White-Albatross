@@ -20,9 +20,9 @@ class AddPoint(State):
 
     def mouseDown(self, event, machine):
         for p in machine.points:
-            if distance(p, event.pos()) < Figure.CTRL and p is not machine.points[0]:
+            if distance(p, event.pos()) < Figure.CTRL_RADIUS and p is not machine.points[0]:
                 return True
-        if len(machine.points) > 2 and distance(machine.points[0], event.pos()) < Figure.CTRL:
+        if len(machine.points) > 2 and distance(machine.points[0], event.pos()) < Figure.CTRL_RADIUS:
             machine.points.append(machine.points[0])
 
             # Decompose
@@ -48,7 +48,7 @@ class Control(State):
 
     def mouseDown(self, event, machine):
         for p in machine.points:
-            if distance(p, event.pos()) < Figure.CTRL:
+            if distance(p, event.pos()) < Figure.CTRL_RADIUS:
                 self.control1 = p
                 return True
         return False
@@ -87,7 +87,7 @@ class Polygon(Figure):
             painter.drawPolygon(QPolygon(poly))
 
         for point in self.points:
-            painter.drawEllipse(point, Figure.CTRL, Figure.CTRL)
+            painter.drawEllipse(point, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
 
     def getDict(self):
         return {'polygon': {'editor': [qpoint2dict(point) for point in self.points],

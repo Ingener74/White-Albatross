@@ -9,7 +9,7 @@ def distance(point1, point2):
 
 # noinspection PyPep8Naming
 class Figure(object):
-    CTRL = 7
+    CTRL_RADIUS = 7
 
     def __init__(self, state):
         self.state = state

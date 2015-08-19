@@ -36,8 +36,11 @@ class WhiteAlbatrossWidget(QWidget):
 
     def mousePressEvent(self, e):
         if self.image:
+            # проходим по фигурам в изображении
             for figure in self.image.figures:
+                # если какая либо фигура отработала нажатие ...
                 if figure.mouseDown(e):
+                    # ... дальше завершаем обход
                     break
             else:
                 new_figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()

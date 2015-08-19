@@ -42,6 +42,13 @@ def srand(min, max):
     pass
 
 
+def isReflex(poly, point):
+    i = poly.index(point)
+    a = poly[i - 1]
+    b = poly[i]
+    c = poly[i + 1]
+    return
+
 class BayazitDecomposer(object):
     """
     http://mpen.ca/406/bayazit
@@ -51,6 +58,8 @@ class BayazitDecomposer(object):
 
     def decompose(self, polygon):
 
-
+        for point in polygon:
+            if isReflex(polygon, point):
+                pass
 
         return [[point for point in polygon]]
