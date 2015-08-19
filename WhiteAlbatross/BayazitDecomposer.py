@@ -50,6 +50,7 @@ def is_reflex(poly, point):
     c = poly[(i + 1) if len(poly) > (i + 1) else 0]
     return right(a, b, c)
 
+
 class BayazitDecomposer(object):
     """
     http://mpen.ca/406/bayazit
@@ -59,14 +60,13 @@ class BayazitDecomposer(object):
         self.steiner_points = []
 
     def decompose(self, polygon):
-
-
-
-        for point in polygon:
-            if is_reflex(polygon, point):
-                self.reflex_vertices.append(point)
-
-                upperDist = lowerDist = sys.maxint
-
+        # for point in polygon:
+        #     if is_reflex(polygon, point):
+        #         self.reflex_vertices.append(point)
+        #
+        #         upperDist = lowerDist = sys.maxint
+        #
+        #         for j in polygon:
+        #             if left()
 
         return [[point for point in polygon]]
