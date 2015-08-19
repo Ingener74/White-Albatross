@@ -3,6 +3,7 @@ from PySide.QtCore import QDir
 from PySide.QtGui import QImage
 
 
+# noinspection PyPep8Naming
 class Image(object):
     def __init__(self, directory, file_name):
         self.directory = directory

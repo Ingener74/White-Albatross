@@ -91,10 +91,12 @@ class WhiteAlbatrossWidget(QWidget):
         self.directory = directory
         self.images = [Image(self.directory, image) for image in images]
 
+        # TODO Открыть json в этой диретории и вытащить из него фигуры для изображений
+
     def selectImage(self, index):
         """
-        Устанавливает изображение для фона
-        :param image: Изображение
+        Выбираем изображение для фона
+        :param index: Изображение
         """
         self.image = self.images[index]
         if self.image:
@@ -113,8 +115,8 @@ class WhiteAlbatrossWidget(QWidget):
             figures_ = [image.getDict() for image in self.images]
             json.dump(obj=figures_, fp=js, separators=(',', ':'), indent=4)
 
-    def setType(self, type):
-        self.type = type
+    def setType(self, figure_type):
+        self.type = figure_type
 
     def deleteFigure(self, index):
         if self.image:
