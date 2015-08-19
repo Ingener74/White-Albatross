@@ -52,21 +52,27 @@ class Control(State):
             self.point = machine.center
         if distance(machine.ctrl, event.pos()) < Figure.CTRL_RADIUS:
             self.point = machine.ctrl
+
         if self.point and self.point == machine.center:
-            delta = event.pos() - self.point
+            delta = event.pos() - machine.center
             machine.center += delta
             machine.ctrl += delta
+            return True
         elif self.point and self.point == machine.ctrl:
-            self.point.setX(event.pos().x())
-            self.point.setY(event.pos().y())
+            machine.ctrl.setX(event.pos().x())
+            machine.ctrl.setY(event.pos().y())
             return True
         else:
             return False
 
     def mouseMove(self, event, machine):
-        if self.point:
-            self.point.setX(event.pos().x())
-            self.point.setY(event.pos().y())
+        if self.point and self.point == machine.center:
+            delta = event.pos() - machine.center
+            machine.center += delta
+            machine.ctrl += delta
+        elif self.point and self.point == machine.ctrl:
+            machine.ctrl.setX(event.pos().x())
+            machine.ctrl.setY(event.pos().y())
 
     def mouseUp(self, event, machine):
         self.point = None

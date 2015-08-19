@@ -1,5 +1,6 @@
 # encoding: utf8
 import math
+import sys
 
 
 def area(a, b, c):
@@ -42,24 +43,30 @@ def srand(min, max):
     pass
 
 
-def isReflex(poly, point):
+def is_reflex(poly, point):
     i = poly.index(point)
     a = poly[i - 1]
     b = poly[i]
-    c = poly[i + 1]
-    return
+    c = poly[(i + 1) if len(poly) > (i + 1) else 0]
+    return right(a, b, c)
 
 class BayazitDecomposer(object):
     """
     http://mpen.ca/406/bayazit
     """
     def __init__(self):
-        pass
+        self.reflex_vertices = []
+        self.steiner_points = []
 
     def decompose(self, polygon):
 
+
+
         for point in polygon:
-            if isReflex(polygon, point):
-                pass
+            if is_reflex(polygon, point):
+                self.reflex_vertices.append(point)
+
+                upperDist = lowerDist = sys.maxint
+
 
         return [[point for point in polygon]]

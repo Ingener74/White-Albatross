@@ -19,19 +19,22 @@ class AddPoint(State):
         State.__init__(self)
 
     def mouseDown(self, event, machine):
+        # Если нажатие в какой нибудь точке кроме последней то просто ничего не делаем и выходим
         for p in machine.points:
-            if distance(p, event.pos()) < Figure.CTRL_RADIUS and p is not machine.points[0]:
-                return True
-        if len(machine.points) > 2 and distance(machine.points[0], event.pos()) < Figure.CTRL_RADIUS:
-            machine.points.append(machine.points[0])
+            if distance(p, event.pos()) < Figure.CTRL_RADIUS and p is not machine.points[-1]:
+                return True  # новую фигуру добавлять не надо
 
-            # Decompose
+        # Если у нас больше 1 точки и мы тыкаем в последнюю тогда ...
+        if len(machine.points) > 1 and distance(machine.points[-1], event.pos()) < Figure.CTRL_RADIUS:
+            # ... делаем декомпозицию ломаной и ...
             machine.convex_polygons = machine.decomposer.decompose(machine.points)
 
+            # ... и переходим в состояние управление ломаной
             machine.state = machine.control
-        else:
-            machine.points.append(event.pos())
-        return True
+
+        # в любом оставшемся случае добавляем последнюю точку в ломаную
+        machine.points.append(event.pos())
+        return True  # новую фигуру добавлять не надо
 
     def mouseMove(self, point, machine):
         pass
