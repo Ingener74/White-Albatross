@@ -74,15 +74,92 @@ class BayazitDecomposer(object):
         self.reflex_vertices = []
         self.steiner_points = []
 
-    def decompose(self, polygon):
-        # for i, point in enumerate(polygon):
-        #     if is_reflex(polygon, point):
-        #         self.reflex_vertices.append(point)
+    def decompose(self, poly):
+
+        # for i, p1 in enumerate(poly):
+        #     if  is_reflex(poly, p1):
+        #         self.reflex_vertices.append(p1)
+        #         upperDist = lowerDist = sys.maxint
+        #         for j, p2 in enumerate(poly):
+        #             if left(poly[i - 1], p1, p2) and right_on(poly[i - 1], p1, poly[j - 1]):
+        #                 p = intersection(poly[i - 1], p1, p2, poly[j - 1])
+        #                 if right(poly[(i + 1) if len(poly) > (i + 1) else 0], p1, p):
+        #                     d = sqdist(poly[i], p)
+        #                     if d < lowerDist:
+        #                         lowerDist = d
+        #                         lowerInt = p
+        #                         lowerIndex = j
+        #             if left(at(poly, i + 1), at(poly, i), at(poly, j + 1)) and right_on(at(poly, i + 1), at(poly, i), at(poly, j)):
+        #                 p = intersection(at(poly, i + 1), at(poly, i), at(poly, j), at(poly, j + 1));
+        #                 if left(at(poly, i - 1), at(poly, i), p):
+        #                     d = sqdist(poly[i], p);
+        #                     if d < upperDist:
+        #                         upperDist = d;
+        #                         upperInt = p;
+        #                         upperIndex = j;
+
+        #         // if there are no vertices to connect to, choose a point in the middle
+        #         if (lowerIndex == (upperIndex + 1) % poly.size()) {
+        #             printf("Case 1: Vertex(%d), lowerIndex(%d), upperIndex(%d), poly.size(%d)\n", i, lowerIndex, upperIndex, (int) poly.size());
+        #             p.x = (lowerInt.x + upperInt.x) / 2;
+        #             p.y = (lowerInt.y + upperInt.y) / 2;
+        #             steinerPoints.push_back(p);
         #
-        #         upper_dist = lower_dist = sys.maxint
+        #             if (i < upperIndex) {
+        #                 lowerPoly.insert(lowerPoly.end(), poly.begin() + i, poly.begin() + upperIndex + 1);
+        #                 lowerPoly.push_back(p);
+        #                 upperPoly.push_back(p);
+        #                 if (lowerIndex != 0) upperPoly.insert(upperPoly.end(), poly.begin() + lowerIndex, poly.end());
+        #                 upperPoly.insert(upperPoly.end(), poly.begin(), poly.begin() + i + 1);
+        #             } else {
+        #                 if (i != 0) lowerPoly.insert(lowerPoly.end(), poly.begin() + i, poly.end());
+        #                 lowerPoly.insert(lowerPoly.end(), poly.begin(), poly.begin() + upperIndex + 1);
+        #                 lowerPoly.push_back(p);
+        #                 upperPoly.push_back(p);
+        #                 upperPoly.insert(upperPoly.end(), poly.begin() + lowerIndex, poly.begin() + i + 1);
+        #             }
+        #         } else {
+        #             // connect to the closest point within the triangle
+        #             printf("Case 2: Vertex(%d), closestIndex(%d), poly.size(%d)\n", i, closestIndex, (int) poly.size());
         #
-        #         for j, p2 in enumerate(polygon):
-        #             if left(polygon[i-1], point, polygon[j]) and right_on(polygon[i-1], point, polygon[j-1]):
-        #                 inter_point =
+        #             if (lowerIndex > upperIndex) {
+        #                 upperIndex += poly.size();
+        #             }
+        #             closestDist = numeric_limits<Scalar>::max();
+        #             for (int j = lowerIndex; j <= upperIndex; ++j) {
+        #                 if (leftOn(at(poly, i - 1), at(poly, i), at(poly, j))
+        #                         && rightOn(at(poly, i + 1), at(poly, i), at(poly, j))) {
+        #                     d = sqdist(at(poly, i), at(poly, j));
+        #                     if (d < closestDist) {
+        #                         closestDist = d;
+        #                         closestVert = at(poly, j);
+        #                         closestIndex = j % poly.size();
+        #                     }
+        #                 }
+        #             }
+        #
+        #             if (i < closestIndex) {
+        #                 lowerPoly.insert(lowerPoly.end(), poly.begin() + i, poly.begin() + closestIndex + 1);
+        #                 if (closestIndex != 0) upperPoly.insert(upperPoly.end(), poly.begin() + closestIndex, poly.end());
+        #                 upperPoly.insert(upperPoly.end(), poly.begin(), poly.begin() + i + 1);
+        #             } else {
+        #                 if (i != 0) lowerPoly.insert(lowerPoly.end(), poly.begin() + i, poly.end());
+        #                 lowerPoly.insert(lowerPoly.end(), poly.begin(), poly.begin() + closestIndex + 1);
+        #                 upperPoly.insert(upperPoly.end(), poly.begin() + closestIndex, poly.begin() + i + 1);
+        #             }
+        #         }
+        #
+        #         // solve smallest poly first
+        #         if (lowerPoly.size() < upperPoly.size()) {
+        #             decomposePoly(lowerPoly);
+        #             decomposePoly(upperPoly);
+        #         } else {
+        #             decomposePoly(upperPoly);
+        #             decomposePoly(lowerPoly);
+        #         }
+        #         return;
+        #     }
+        # }
+        # polys.push_back(poly);
 
         return [[point for point in polygon]]
