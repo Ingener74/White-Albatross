@@ -93,7 +93,7 @@ class MainWindow(QWidget, Ui_GhastlyLion):
     def on_figures_changed(self, figures):
         self.figures.clear()
         self.figures.addItems([str(figure) for figure in figures])
-        # self.white_albatross.save()
+        self.white_albatross.save()
 
     def figures_context_menu(self, point):
         print point

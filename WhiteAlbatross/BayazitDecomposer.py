@@ -1,6 +1,7 @@
 # encoding: utf8
 import math
 import sys
+from PySide.QtCore import QPoint
 
 
 def area(a, b, c):
@@ -32,7 +33,7 @@ def sqdist(a, b):
 
 
 def eq(a, b):
-    pass
+    return math.fabs(a - b) <= 1e-8
 
 
 def wrap(a, b):
@@ -41,6 +42,20 @@ def wrap(a, b):
 
 def srand(min, max):
     pass
+
+
+def intersection(p1, p2, q1, q2):
+    a1 = p2.y() - p1.y()
+    b1 = p1.x() - p2.x()
+    c1 = a1 * p1.x() + b1 * p1.y()
+    a2 = q2.y() - q1.y()
+    b2 = q1.x() - q2.x()
+    c2 = a2 * q1.x() + b2 * q1.y()
+    det = a1 * b2 - a2*b1
+    if not eq(det, 0):
+        return QPoint((b2 * c1 - b1 * c2) / det, (a1 * c2 - a2 * c1) / det)
+    else:
+        return QPoint()
 
 
 def is_reflex(poly, point):
@@ -60,13 +75,14 @@ class BayazitDecomposer(object):
         self.steiner_points = []
 
     def decompose(self, polygon):
-        # for point in polygon:
+        # for i, point in enumerate(polygon):
         #     if is_reflex(polygon, point):
         #         self.reflex_vertices.append(point)
         #
-        #         upperDist = lowerDist = sys.maxint
+        #         upper_dist = lower_dist = sys.maxint
         #
-        #         for j in polygon:
-        #             if left()
+        #         for j, p2 in enumerate(polygon):
+        #             if left(polygon[i-1], point, polygon[j]) and right_on(polygon[i-1], point, polygon[j-1]):
+        #                 inter_point =
 
         return [[point for point in polygon]]
