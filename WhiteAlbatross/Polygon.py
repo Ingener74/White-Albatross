@@ -114,6 +114,10 @@ class Polygon(Figure):
         return {'polygon': {'editor': [qpoint2dict(point) for point in self.points],
                             'convex': [[qpoint2dict(point) for point in convex] for convex in self.convex_polygons]}}
 
+    @staticmethod
+    def fromDict(dictionary):
+        return Polygon()
+
     def __str__(self):
         return self.__repr__()
 

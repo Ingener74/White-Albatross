@@ -17,6 +17,12 @@ COMPANY = 'Venus.Games'
 APPNAME = 'GhastlyLion'
 
 
+"""
+1. Полное восстановление рабочего состояния из последнего сохраннёного
+2. Улучшить управление фигурами: добавлять, удалять точки, фигуры
+"""
+
+
 class MainWindow(QWidget, Ui_GhastlyLion):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
@@ -37,25 +43,27 @@ class MainWindow(QWidget, Ui_GhastlyLion):
         self.type.setCurrentIndex(int(self.settings.value(LAST_FIGURE_TYPE, defaultValue=0)))
 
         self.addImages.clicked.connect(self.add_images_click)
-        self.openFolder.clicked.connect(self.open_folder)
+        self.openFolder.clicked.connect(self.open_folder_clicked)
         self.removeImages.clicked.connect(self.remove_images)
-        self.imagesList.itemClicked.connect(self.item_clicked)
+        self.imagesList.itemSelectionChanged.connect(self.item_selected)
 
         self.figures.customContextMenuRequested.connect(self.figures_context_menu)
 
         if self.current_directory:
             self.open_folder()
-
-        # self.imagesList.setCurrentItem(self.imagesList.takeItem(
-        #     int(self.settings.value(SELECTED_IMAGE, defaultValue=0))
-        # ))
+        self.imagesList.setCurrentRow(int(self.settings.value(SELECTED_IMAGE, defaultValue=0)))
 
     def add_images_click(self):
         file_names, selected_filters = QFileDialog.getOpenFileNames(parent=self,
                                                                     caption=u'Add image files to polygon list')
         print file_names, selected_filters
 
+    def open_folder_clicked(self):
+        self.current_directory = None
+        self.open_folder()
+
     def open_folder(self):
+        self.imagesList.clear()
         if not self.current_directory:
             self.current_directory = QFileDialog.getExistingDirectory(parent=self,
                                                                       caption=u'Add images from directory')
@@ -83,8 +91,8 @@ class MainWindow(QWidget, Ui_GhastlyLion):
         else:
             self.removeImages.setEnabled(True)
 
-    def item_clicked(self, item):
-        self.white_albatross.selectImage(self.imagesList.indexFromItem(item).row())
+    def item_selected(self):
+        self.white_albatross.selectImage(self.imagesList.currentRow())
 
     def on_figures_changed(self, figures):
         self.figures.clear()
@@ -103,7 +111,7 @@ class MainWindow(QWidget, Ui_GhastlyLion):
         self.settings.setValue(SPLITTER, self.splitter.saveState())
         self.settings.setValue(CURRENT_DIRECTORY, self.current_directory)
         self.settings.setValue(LAST_FIGURE_TYPE, self.type.currentIndex())
-        # self.settings.setValue(SELECTED_IMAGE, self.imagesList.currentRow())
+        self.settings.setValue(SELECTED_IMAGE, self.imagesList.currentRow())
 
 
 if __name__ == '__main__':

@@ -48,3 +48,10 @@ class Figure(object):
 
     def getDict(self):
         raise NotImplementedError
+
+    # @staticmethod
+    # def create(json_dict):
+    #     if json_dict['rect']:
+    #         return Rectangle.fromDict(json_dict)
+    #     else:
+    #         pass

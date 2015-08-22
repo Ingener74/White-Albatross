@@ -2,13 +2,21 @@
 from PySide.QtCore import QDir
 from PySide.QtGui import QImage
 
+from WhiteAlbatross.Rectangle import Rectangle
+from WhiteAlbatross.Circle import Circle
+from WhiteAlbatross.Polygon import Polygon
+
 
 # noinspection PyPep8Naming
 class Image(object):
-    def __init__(self, directory, file_name):
+    def __init__(self, directory, file_name, json_dict=None):
         self.directory = directory
         self.file_name = file_name
-        self.figures = []
+        self.figures = [Rectangle.fromDict(js_dictionary['rect']) if js_dictionary.keys()[0] == 'rect' else
+                        Circle.fromDict(js_dictionary['circle']) if js_dictionary.keys()[0] == 'circle' else
+                        Polygon.fromDict(js_dictionary['polygon']) for js_dictionary in json_dict]
+
+        pass
 
     def draw(self, painter):
         qimage = QImage(self.directory.path() + QDir.separator() + self.file_name)

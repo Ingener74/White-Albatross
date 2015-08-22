@@ -10,6 +10,7 @@ class FirstPoint(State):
     """
     Состояние для установки первой точки
     """
+
     def __init__(self):
         State.__init__(self)
 
@@ -23,6 +24,7 @@ class SecondPoint(State):
     """
     Состояние для установки второй точки
     """
+
     def __init__(self):
         State.__init__(self)
 
@@ -43,6 +45,7 @@ class Control(State):
     """
     Состояние для перемещения точек круга
     """
+
     def __init__(self):
         State.__init__(self)
         self.point = None
@@ -80,15 +83,14 @@ class Control(State):
 
 # noinspection PyPep8Naming
 class Circle(Figure):
-    def __init__(self, x=0, y=0, radius=0):
-
+    def __init__(self, center=QPoint(), ctrl=QPoint()):
         self.first_point = FirstPoint()
         self.second_point = SecondPoint()
         self.control = Control()
 
         Figure.__init__(self, self.first_point)
-        self.center = QPoint(x, y)
-        self.ctrl = QPoint(x + radius, y)
+        self.center = center
+        self.ctrl = ctrl
 
     def draw(self, painter):
         if not self.center.isNull() and not self.ctrl.isNull():
@@ -102,11 +104,23 @@ class Circle(Figure):
     def getDict(self):
         return {
             'circle': {
-                'x': self.center.x(),
-                'y': self.center.y(),
-                'radius': distance(self.center, self.ctrl)
+                'center': {
+                    'x': self.center.x(),
+                    'y': self.center.y(),
+                },
+                'ctrl': {
+                    'x': self.ctrl.x(),
+                    'y': self.ctrl.y(),
+                }
             }
         }
+
+    @staticmethod
+    def fromDict(dictionary):
+        return Circle(QPoint(dictionary['center']['x'],
+                             dictionary['center']['y']),
+                      QPoint(dictionary['ctrl']['x'],
+                             dictionary['ctrl']['y']))
 
     def __str__(self):
         return self.__repr__()

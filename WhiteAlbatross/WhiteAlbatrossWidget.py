@@ -1,5 +1,6 @@
 # encoding: utf8
 import json
+import os
 
 from PySide.QtCore import Signal, QDir
 from PySide.QtGui import QWidget, QPainter, QSizePolicy, QPen, QColor, QTransform, QBrush, QImage, QPainterPath
@@ -89,9 +90,14 @@ class WhiteAlbatrossWidget(QWidget):
 
     def addImages(self, directory, images):
         self.directory = directory
-        self.images = [Image(self.directory, image) for image in images]
 
-        # TODO Открыть json в этой диретории и вытащить из него фигуры для изображений
+        json_file_name = self.directory.path() + QDir.separator() + 'box2d.json'
+
+        if os.path.exists(json_file_name):
+            with open(json_file_name) as f:
+                self.images = [Image(self.directory, image['file_name'], image['figures']) for image in json.load(f)]
+        else:
+            self.images = [Image(self.directory, image) for image in images]
 
     def selectImage(self, index):
         """

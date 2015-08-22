@@ -105,6 +105,10 @@ class Rectangle(Figure):
             }
         }
 
+    @staticmethod
+    def fromDict(dictionary):
+        return Rectangle(dictionary['x1'], dictionary['y1'], dictionary['x2'], dictionary['y2'])
+
     def __str__(self):
         return self.__repr__()
 
