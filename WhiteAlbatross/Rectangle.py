@@ -58,6 +58,13 @@ class Control(State):
     def mouseUp(self, event, machine):
         self.point = None
 
+    def draw(self, painter):
+        if self.point:
+            pen = QPen()
+            pen.setColor(QColor(255, 0, 0))
+            painter.setPen(pen)
+            painter.drawEllipse(self.point, Figure.CTRL_RADIUS + 4, Figure.CTRL_RADIUS + 4)
+
 
 # noinspection PyPep8Naming
 class Rectangle(Figure):
@@ -85,6 +92,8 @@ class Rectangle(Figure):
             painter.drawRect(QRect(self.p1, self.p2))
             painter.drawEllipse(self.p1, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
             painter.drawEllipse(self.p2, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
+
+        Figure.draw(self, painter)
 
     def getDict(self):
         return {

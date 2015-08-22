@@ -36,14 +36,6 @@ def eq(a, b):
     return math.fabs(a - b) <= 1e-8
 
 
-def wrap(a, b):
-    pass
-
-
-def srand(min, max):
-    pass
-
-
 def intersection(p1, p2, q1, q2):
     a1 = p2.y() - p1.y()
     b1 = p1.x() - p2.x()
@@ -74,92 +66,127 @@ class BayazitDecomposer(object):
         self.reflex_vertices = []
         self.steiner_points = []
 
+        self.polys = []
+
+    def make_ccw(self, poly):
+        br = 0
+
+        for i, p in enumerate(poly):
+            if p.x() < poly[br].y() or (p.y() == poly[br].y() and p.x() > poly[br].x()):
+                br = i
+
+        if not left(poly[br - 1], poly[br], poly[(br + 1) if len(poly) > (br + 1) else 0]):
+            print u'Переверул ломаную по часовой стрелке'
+            return poly[::-1]
+        print u'Ломаная по часовой стрелке'
+        return poly[:]
+
     def decompose(self, poly):
 
-        # for i, p1 in enumerate(poly):
-        #     if  is_reflex(poly, p1):
-        #         self.reflex_vertices.append(p1)
-        #         upperDist = lowerDist = sys.maxint
-        #         for j, p2 in enumerate(poly):
-        #             if left(poly[i - 1], p1, p2) and right_on(poly[i - 1], p1, poly[j - 1]):
-        #                 p = intersection(poly[i - 1], p1, p2, poly[j - 1])
-        #                 if right(poly[(i + 1) if len(poly) > (i + 1) else 0], p1, p):
-        #                     d = sqdist(poly[i], p)
-        #                     if d < lowerDist:
-        #                         lowerDist = d
-        #                         lowerInt = p
-        #                         lowerIndex = j
-        #             if left(at(poly, i + 1), at(poly, i), at(poly, j + 1)) and right_on(at(poly, i + 1), at(poly, i), at(poly, j)):
-        #                 p = intersection(at(poly, i + 1), at(poly, i), at(poly, j), at(poly, j + 1));
-        #                 if left(at(poly, i - 1), at(poly, i), p):
-        #                     d = sqdist(poly[i], p);
-        #                     if d < upperDist:
-        #                         upperDist = d;
-        #                         upperInt = p;
-        #                         upperIndex = j;
+        lower_poly = []
+        upper_poly = []
 
-        #         // if there are no vertices to connect to, choose a point in the middle
-        #         if (lowerIndex == (upperIndex + 1) % poly.size()) {
-        #             printf("Case 1: Vertex(%d), lowerIndex(%d), upperIndex(%d), poly.size(%d)\n", i, lowerIndex, upperIndex, (int) poly.size());
-        #             p.x = (lowerInt.x + upperInt.x) / 2;
-        #             p.y = (lowerInt.y + upperInt.y) / 2;
-        #             steinerPoints.push_back(p);
-        #
-        #             if (i < upperIndex) {
-        #                 lowerPoly.insert(lowerPoly.end(), poly.begin() + i, poly.begin() + upperIndex + 1);
-        #                 lowerPoly.push_back(p);
-        #                 upperPoly.push_back(p);
-        #                 if (lowerIndex != 0) upperPoly.insert(upperPoly.end(), poly.begin() + lowerIndex, poly.end());
-        #                 upperPoly.insert(upperPoly.end(), poly.begin(), poly.begin() + i + 1);
-        #             } else {
-        #                 if (i != 0) lowerPoly.insert(lowerPoly.end(), poly.begin() + i, poly.end());
-        #                 lowerPoly.insert(lowerPoly.end(), poly.begin(), poly.begin() + upperIndex + 1);
-        #                 lowerPoly.push_back(p);
-        #                 upperPoly.push_back(p);
-        #                 upperPoly.insert(upperPoly.end(), poly.begin() + lowerIndex, poly.begin() + i + 1);
-        #             }
-        #         } else {
-        #             // connect to the closest point within the triangle
-        #             printf("Case 2: Vertex(%d), closestIndex(%d), poly.size(%d)\n", i, closestIndex, (int) poly.size());
-        #
-        #             if (lowerIndex > upperIndex) {
-        #                 upperIndex += poly.size();
-        #             }
-        #             closestDist = numeric_limits<Scalar>::max();
-        #             for (int j = lowerIndex; j <= upperIndex; ++j) {
-        #                 if (leftOn(at(poly, i - 1), at(poly, i), at(poly, j))
-        #                         && rightOn(at(poly, i + 1), at(poly, i), at(poly, j))) {
-        #                     d = sqdist(at(poly, i), at(poly, j));
-        #                     if (d < closestDist) {
-        #                         closestDist = d;
-        #                         closestVert = at(poly, j);
-        #                         closestIndex = j % poly.size();
-        #                     }
-        #                 }
-        #             }
-        #
-        #             if (i < closestIndex) {
-        #                 lowerPoly.insert(lowerPoly.end(), poly.begin() + i, poly.begin() + closestIndex + 1);
-        #                 if (closestIndex != 0) upperPoly.insert(upperPoly.end(), poly.begin() + closestIndex, poly.end());
-        #                 upperPoly.insert(upperPoly.end(), poly.begin(), poly.begin() + i + 1);
-        #             } else {
-        #                 if (i != 0) lowerPoly.insert(lowerPoly.end(), poly.begin() + i, poly.end());
-        #                 lowerPoly.insert(lowerPoly.end(), poly.begin(), poly.begin() + closestIndex + 1);
-        #                 upperPoly.insert(upperPoly.end(), poly.begin() + closestIndex, poly.begin() + i + 1);
-        #             }
-        #         }
-        #
-        #         // solve smallest poly first
-        #         if (lowerPoly.size() < upperPoly.size()) {
-        #             decomposePoly(lowerPoly);
-        #             decomposePoly(upperPoly);
-        #         } else {
-        #             decomposePoly(upperPoly);
-        #             decomposePoly(lowerPoly);
-        #         }
-        #         return;
-        #     }
-        # }
-        # polys.push_back(poly);
+        upper_int = QPoint(0, 0)
+        lower_int = QPoint(0, 0)
 
-        return [[point for point in polygon]]
+        upper_index = 0
+        lower_index = 0
+        closest_index = 0
+
+        p = QPoint(0, 0)
+
+        for pi in poly:
+            if is_reflex(poly, pi):
+
+                pim1 = poly[-1 if pi is poly[0] else poly.index(pi) - 1]
+                pip1 = poly[0 if pi is poly[-1] else poly.index(pi) + 1]
+
+                self.reflex_vertices.append(pi)
+                upper_dist = sys.maxint
+                lower_dist = sys.maxint
+
+                for pj in poly:
+                    pjm1 = poly[-1 if pj is poly[0] else poly.index(pj) - 1]
+                    pjp1 = poly[0 if pj is poly[-1] else poly.index(pj) + 1]
+
+                    if left(pim1, pi, pj) and right_on(pim1, pi, pjm1):
+                        p = intersection(pim1, pi, pj, pjm1)
+                        if right(pip1, pi, p):
+                            d = sqdist(pi, p)
+                            if d < lower_dist:
+                                lower_dist = d
+                                lower_int = p
+                                lower_index = poly.index(pj)
+
+                    if left(pip1, pi, pjp1) and right_on(pip1, pi, pj):
+                        p = intersection(pip1, pi, pj, pjp1)
+                        if left(pim1, pi, p):
+                            d = sqdist(pi, p)
+                            if d < upper_dist:
+                                upper_dist = d
+                                upper_int = p
+                                upper_index = poly.index(pj)
+
+                i = poly.index(pi)
+                if lower_index == ((upper_index + 1) % len(poly)):
+                    p.setX((lower_int.x() + upper_int.x()) / 2)
+                    p.setY((lower_int.y() + upper_int.y()) / 2)
+
+                    self.steiner_points.append(p)
+
+                    if i < upper_index:
+                        lower_poly += poly[i:upper_index + 1]
+
+                        lower_poly.append(p)
+                        upper_poly.append(p)
+                        if lower_index != 0:
+                            upper_poly += poly[lower_index:]
+
+                        upper_poly += poly[0:i + 1]
+                    else:
+                        if i != 0:
+                            lower_poly += poly[i:]
+
+                        lower_poly += poly[0:upper_index + 1]
+                        lower_poly.append(p)
+                        upper_poly.append(p)
+
+                        upper_poly += poly[lower_index:i+1]
+                else:
+                    if lower_index > upper_index:
+                        upper_index += len(poly)
+
+                    closest_dist = sys.float_info.max
+                    for j in xrange(lower_index, upper_index + 1):
+
+                        pj = poly[j % len(poly)]
+
+                        if left_on(pim1, pi, pj) and right_on(pip1, pi, pj):
+                            d = sqdist(pi, pj)
+                            if d < closest_dist:
+                                closest_dist = d
+                                closest_index = j % len(poly)
+
+                    if i < closest_index:
+                        lower_poly += poly[i:closest_index + 1]
+                        if closest_index != 0:
+                            upper_poly += poly[closest_index:]
+
+                        upper_poly += poly[0:i + 1]
+                    else:
+                        if i != 0:
+                            lower_poly += poly[i:]
+
+                        lower_poly += poly[0:closest_index + 1]
+                        upper_poly += poly[closest_index:i + 1]
+
+                if len(lower_poly) < len(upper_poly):
+                    self.decompose(lower_poly)
+                    self.decompose(upper_poly)
+                else:
+                    self.decompose(upper_poly)
+                    self.decompose(lower_poly)
+
+                return self.polys
+
+        self.polys.append(poly)

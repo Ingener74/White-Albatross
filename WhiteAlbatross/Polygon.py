@@ -1,5 +1,6 @@
 # encoding: utf8
-from PySide.QtGui import QPolygon
+from PySide.QtCore import Qt
+from PySide.QtGui import QPolygon, QPen, QColor, QBrush
 
 from WhiteAlbatross.Figure import Figure, distance
 from WhiteAlbatross.State import State
@@ -27,20 +28,14 @@ class AddPoint(State):
         # Если у нас больше 1 точки и мы тыкаем в последнюю тогда ...
         if len(machine.points) > 1 and distance(machine.points[-1], event.pos()) < Figure.CTRL_RADIUS:
             # ... делаем декомпозицию ломаной и ...
-            machine.convex_polygons = machine.decomposer.decompose(machine.points)
+            machine.convex_polygons = machine.decomposer.decompose(machine.decomposer.make_ccw(machine.points))
 
             # ... и переходим в состояние управление ломаной
             machine.state = machine.control
 
-        # в любом оставшемся случае добавляем последнюю точку в ломаную
+        # в любом оставшемся случае добавляем точку в ломаную
         machine.points.append(event.pos())
         return True  # новую фигуру добавлять не надо
-
-    def mouseMove(self, point, machine):
-        pass
-
-    def mouseUp(self, point, machine):
-        pass
 
 
 class Control(State):
@@ -58,14 +53,21 @@ class Control(State):
 
     def mouseMove(self, event, machine):
         if self.control1:
-            self.control1.setX(event.pos().x())
-            self.control1.setY(event.pos().y())
+            point = event.pos()
+            self.control1.setX(point.x())
+            self.control1.setY(point.y())
 
     def mouseUp(self, event, machine):
-        # Decompose
-        machine.convex_polygons = machine.decomposer.decompose(machine.points)
+        if self.control1:
+            # Разбиение
+            machine.convex_polygons = machine.decomposer.decompose(machine.decomposer.make_ccw(machine.points))
+            pass
 
         self.control1 = None
+
+    def draw(self, painter):
+        if self.control1:
+            painter.drawEllipse(self.control1, Figure.CTRL_RADIUS + 4, Figure.CTRL_RADIUS + 4)
 
 
 # noinspection PyPep8Naming
@@ -84,13 +86,29 @@ class Polygon(Figure):
         self.convex_polygons = []
 
     def draw(self, painter):
+
+        painter.setPen(QPen(QBrush(QColor(232, 109, 21) if self.state is self.add_point else
+                                   QColor(21, 144, 232)),
+                            1,
+                            Qt.SolidLine))
         painter.drawPolygon(QPolygon(self.points))
 
-        for poly in self.convex_polygons:
-            painter.drawPolygon(QPolygon(poly))
+        for i, poly in enumerate(self.convex_polygons):
+            if poly:
+                painter.setPen(QPen(QBrush(Figure.COLORS[i % len(Figure.COLORS)]),
+                                    2,
+                                    Qt.SolidLine))
+                painter.drawPolygon(QPolygon(poly))
 
         for point in self.points:
+            painter.setPen(QPen(QBrush(QColor(31, 174, 222) if point is self.points[0] else
+                                       QColor(222, 79, 31) if point is self.points[-1] else
+                                       QColor(78, 222, 31)),
+                                2,
+                                Qt.SolidLine))
             painter.drawEllipse(point, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
+
+        Figure.draw(self, painter)
 
     def getDict(self):
         return {'polygon': {'editor': [qpoint2dict(point) for point in self.points],

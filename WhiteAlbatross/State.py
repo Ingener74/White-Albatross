@@ -14,3 +14,6 @@ class State(object):
 
     def mouseUp(self, point, machine):
         pass
+
+    def draw(self, painter):
+        pass

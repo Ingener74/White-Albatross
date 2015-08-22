@@ -97,6 +97,8 @@ class Circle(Figure):
             painter.drawEllipse(self.center, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
             painter.drawEllipse(self.ctrl, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
 
+        Figure.draw(self, painter)
+
     def getDict(self):
         return {
             'circle': {
