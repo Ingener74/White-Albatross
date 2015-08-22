@@ -36,7 +36,6 @@ class MainWindow(QWidget, Ui_GhastlyLion):
         self.type.currentIndexChanged.connect(self.white_albatross.setType)
         self.type.setCurrentIndex(int(self.settings.value(LAST_FIGURE_TYPE, defaultValue=0)))
 
-        self.save.clicked.connect(self.save_button)
         self.addImages.clicked.connect(self.add_images_click)
         self.openFolder.clicked.connect(self.open_folder)
         self.removeImages.clicked.connect(self.remove_images)
@@ -83,9 +82,6 @@ class MainWindow(QWidget, Ui_GhastlyLion):
             self.removeImages.setEnabled(False)
         else:
             self.removeImages.setEnabled(True)
-
-    def save_button(self):
-        self.white_albatross.save()
 
     def item_clicked(self, item):
         self.white_albatross.selectImage(self.imagesList.indexFromItem(item).row())
