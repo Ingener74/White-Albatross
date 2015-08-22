@@ -16,8 +16,6 @@ class Image(object):
                         Circle.fromDict(js_dictionary['circle']) if js_dictionary.keys()[0] == 'circle' else
                         Polygon.fromDict(js_dictionary['polygon']) for js_dictionary in json_dict]
 
-        pass
-
     def draw(self, painter):
         qimage = QImage(self.directory.path() + QDir.separator() + self.file_name)
         painter.drawImage(0, 0, qimage)

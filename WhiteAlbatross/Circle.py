@@ -117,10 +117,12 @@ class Circle(Figure):
 
     @staticmethod
     def fromDict(dictionary):
-        return Circle(QPoint(dictionary['center']['x'],
-                             dictionary['center']['y']),
-                      QPoint(dictionary['ctrl']['x'],
-                             dictionary['ctrl']['y']))
+        circle = Circle(QPoint(dictionary['center']['x'],
+                               dictionary['center']['y']),
+                        QPoint(dictionary['ctrl']['x'],
+                               dictionary['ctrl']['y']))
+        circle.state = circle.control
+        return circle
 
     def __str__(self):
         return self.__repr__()

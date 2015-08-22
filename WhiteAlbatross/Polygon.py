@@ -1,5 +1,5 @@
 # encoding: utf8
-from PySide.QtCore import Qt
+from PySide.QtCore import Qt, QPoint
 from PySide.QtGui import QPolygon, QPen, QColor, QBrush
 
 from WhiteAlbatross.Figure import Figure, distance
@@ -9,6 +9,10 @@ from WhiteAlbatross.BayazitDecomposer import BayazitDecomposer
 
 def qpoint2dict(point):
     return {'x': point.x(), 'y': point.y()}
+
+
+def dict2qpoint(dictionary):
+    return QPoint(dictionary['x'], dictionary['y'])
 
 
 def qpoint2str(point):
@@ -116,7 +120,11 @@ class Polygon(Figure):
 
     @staticmethod
     def fromDict(dictionary):
-        return Polygon()
+        polygon = Polygon()
+        polygon.points = [dict2qpoint(d) for d in dictionary['editor']]
+        polygon.convex_polygons = [[dict2qpoint(d) for d in poly] for poly in dictionary['convex']]
+        polygon.state = polygon.control
+        return polygon
 
     def __str__(self):
         return self.__repr__()
