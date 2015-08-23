@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:/Users/Pavel/workspace/White-Albatross/GhastlyLion/GhastlyLion.ui'
 #
-# Created: Sat Aug 22 21:17:17 2015
+# Created: Sun Aug 23 23:52:55 2015
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -101,22 +101,14 @@ class Ui_GhastlyLion(object):
         self.verticalLayout_3.addWidget(self.figures)
         self.horizontalLayout_3 = QtGui.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.pushButton_4 = QtGui.QPushButton(self.groupBox_4)
-        self.pushButton_4.setText("")
+        self.deleteFigure = QtGui.QPushButton(self.groupBox_4)
+        self.deleteFigure.setText("")
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(":/main/plus.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_4.setIcon(icon4)
-        self.pushButton_4.setIconSize(QtCore.QSize(32, 32))
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.horizontalLayout_3.addWidget(self.pushButton_4)
-        self.pushButton_5 = QtGui.QPushButton(self.groupBox_4)
-        self.pushButton_5.setText("")
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/main/moins.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_5.setIcon(icon5)
-        self.pushButton_5.setIconSize(QtCore.QSize(32, 32))
-        self.pushButton_5.setObjectName("pushButton_5")
-        self.horizontalLayout_3.addWidget(self.pushButton_5)
+        icon4.addPixmap(QtGui.QPixmap(":/main/moins.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.deleteFigure.setIcon(icon4)
+        self.deleteFigure.setIconSize(QtCore.QSize(32, 32))
+        self.deleteFigure.setObjectName("deleteFigure")
+        self.horizontalLayout_3.addWidget(self.deleteFigure)
         spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem1)
         self.verticalLayout_3.addLayout(self.horizontalLayout_3)

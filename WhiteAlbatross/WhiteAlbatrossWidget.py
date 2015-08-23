@@ -188,4 +188,6 @@ class WhiteAlbatrossWidget(QWidget):
 
     def deleteFigure(self, index):
         if self.image:
-            del self.image.figures[index]
+            del self.image.figures[index:index+1]
+            self.figuresChanged.emit(self.image.figures)
+            self.update()

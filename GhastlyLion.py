@@ -45,6 +45,7 @@ class MainWindow(QWidget, Ui_GhastlyLion):
         self.openFolder.clicked.connect(self.open_folder_clicked)
         self.removeImages.clicked.connect(self.remove_images)
         self.imagesList.itemSelectionChanged.connect(self.item_selected)
+        self.deleteFigure.clicked.connect(self.delete_figure)
 
         self.figures.customContextMenuRequested.connect(self.figures_context_menu)
 
@@ -100,6 +101,12 @@ class MainWindow(QWidget, Ui_GhastlyLion):
 
     def figures_context_menu(self, point):
         print point
+
+    def delete_figure(self):
+        row = self.figures.currentRow()
+        if row != -1:
+            self.white_albatross.deleteFigure(row)
+            self.figures.setCurrentRow(row)
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
