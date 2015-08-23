@@ -10,8 +10,8 @@ class FirstPoint(State):
     def __init__(self):
         State.__init__(self)
 
-    def mouseDown(self, event, machine):
-        machine.p1 = event.pos()
+    def mouseDown(self, point, machine):
+        machine.p1 = point
         machine.state = machine.second_point
         return True
 
@@ -20,16 +20,16 @@ class SecondPoint(State):
     def __init__(self):
         State.__init__(self)
 
-    def mouseDown(self, event, machine):
-        machine.p2 = event.pos()
+    def mouseDown(self, point, machine):
+        machine.p2 = point
         return True
 
-    def mouseMove(self, event, machine):
-        machine.p2 = event.pos()
+    def mouseMove(self, point, machine):
+        machine.p2 = point
 
-    def mouseUp(self, event, machine):
-        machine.p2 = event.pos()
-        if distance(machine.p1, event.pos()) > Figure.CTRL_RADIUS:
+    def mouseUp(self, point, machine):
+        machine.p2 = point
+        if distance(machine.p1, point) > Figure.CTRL_RADIUS:
             machine.state = machine.control
 
 
@@ -38,24 +38,24 @@ class Control(State):
         State.__init__(self)
         self.point = None
 
-    def mouseDown(self, event, machine):
-        if distance(machine.p1, event.pos()) < Figure.CTRL_RADIUS:
+    def mouseDown(self, point, machine):
+        if distance(machine.p1, point) < Figure.CTRL_RADIUS:
             self.point = machine.p1
-        if distance(machine.p2, event.pos()) < Figure.CTRL_RADIUS:
+        if distance(machine.p2, point) < Figure.CTRL_RADIUS:
             self.point = machine.p2
         if self.point:
-            self.point.setX(event.pos().x())
-            self.point.setY(event.pos().y())
+            self.point.setX(point.x())
+            self.point.setY(point.y())
             return True
         else:
             return False
 
-    def mouseMove(self, event, machine):
+    def mouseMove(self, point, machine):
         if self.point:
-            self.point.setX(event.pos().x())
-            self.point.setY(event.pos().y())
+            self.point.setX(point.x())
+            self.point.setY(point.y())
 
-    def mouseUp(self, event, machine):
+    def mouseUp(self, point, machine):
         self.point = None
 
     def draw(self, painter):

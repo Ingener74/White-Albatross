@@ -16,8 +16,8 @@ class FirstPoint(State):
     def __init__(self):
         State.__init__(self)
 
-    def mouseDown(self, event, machine):
-        machine.center = event.pos()
+    def mouseDown(self, point, machine):
+        machine.center = point
         machine.state = machine.second_point
         return True
 
@@ -30,16 +30,16 @@ class SecondPoint(State):
     def __init__(self):
         State.__init__(self)
 
-    def mouseDown(self, event, machine):
-        machine.ctrl = event.pos()
+    def mouseDown(self, point, machine):
+        machine.ctrl = point
         return True
 
-    def mouseMove(self, event, machine):
-        machine.ctrl = event.pos()
+    def mouseMove(self, point, machine):
+        machine.ctrl = point
 
-    def mouseUp(self, event, machine):
-        machine.ctrl = event.pos()
-        if distance(machine.center, event.pos()) > Figure.CTRL_RADIUS:
+    def mouseUp(self, point, machine):
+        machine.ctrl = point
+        if distance(machine.center, point) > Figure.CTRL_RADIUS:
             machine.state = machine.control
 
 
@@ -52,34 +52,34 @@ class Control(State):
         State.__init__(self)
         self.point = None
 
-    def mouseDown(self, event, machine):
-        if distance(machine.center, event.pos()) < Figure.CTRL_RADIUS:
+    def mouseDown(self, point, machine):
+        if distance(machine.center, point) < Figure.CTRL_RADIUS:
             self.point = machine.center
-        if distance(machine.ctrl, event.pos()) < Figure.CTRL_RADIUS:
+        if distance(machine.ctrl, point) < Figure.CTRL_RADIUS:
             self.point = machine.ctrl
 
         if self.point and self.point == machine.center:
-            delta = event.pos() - machine.center
+            delta = point - machine.center
             machine.center += delta
             machine.ctrl += delta
             return True
         elif self.point and self.point == machine.ctrl:
-            machine.ctrl.setX(event.pos().x())
-            machine.ctrl.setY(event.pos().y())
+            machine.ctrl.setX(point.x())
+            machine.ctrl.setY(point.y())
             return True
         else:
             return False
 
-    def mouseMove(self, event, machine):
+    def mouseMove(self, point, machine):
         if self.point and self.point == machine.center:
-            delta = event.pos() - machine.center
+            delta = point - machine.center
             machine.center += delta
             machine.ctrl += delta
         elif self.point and self.point == machine.ctrl:
-            machine.ctrl.setX(event.pos().x())
-            machine.ctrl.setY(event.pos().y())
+            machine.ctrl.setX(point.x())
+            machine.ctrl.setY(point.y())
 
-    def mouseUp(self, event, machine):
+    def mouseUp(self, point, machine):
         self.point = None
 
 

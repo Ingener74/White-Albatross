@@ -23,23 +23,23 @@ class AddPoint(State):
     def __init__(self):
         State.__init__(self)
 
-    def mouseDown(self, event, machine):
+    def mouseDown(self, point, machine):
         # Если нажатие в какой нибудь точке кроме последней то просто ничего не делаем и выходим
         for p in machine.points:
-            if distance(p, event.pos()) < Figure.CTRL_RADIUS and p is not machine.points[-1]:
+            if distance(p, point) < Figure.CTRL_RADIUS and p is not machine.points[-1]:
                 return True  # новую фигуру добавлять не надо
 
         # Если у нас больше 1 точки и мы тыкаем в последнюю тогда ...
-        if len(machine.points) > 1 and distance(machine.points[-1], event.pos()) < Figure.CTRL_RADIUS:
+        if len(machine.points) > 1 and distance(machine.points[-1], point) < Figure.CTRL_RADIUS:
             # ... делаем декомпозицию ломаной и ...
-            machine.convex_polygons = machine.decomposer.decompose(machine.points)
+            machine.decompose()
 
             # ... и переходим в состояние управление ломаной
             machine.state = machine.control
             return True
 
         # в любом оставшемся случае добавляем точку в ломаную
-        machine.points.append(event.pos())
+        machine.points.append(point)
         return True  # новую фигуру добавлять не надо
 
 
@@ -49,23 +49,22 @@ class Control(State):
 
         self.control1 = None
 
-    def mouseDown(self, event, machine):
+    def mouseDown(self, point, machine):
         for p in machine.points:
-            if distance(p, event.pos()) < Figure.CTRL_RADIUS:
+            if distance(p, point) < Figure.CTRL_RADIUS:
                 self.control1 = p
                 return True
         return False
 
-    def mouseMove(self, event, machine):
+    def mouseMove(self, point, machine):
         if self.control1:
-            point = event.pos()
             self.control1.setX(point.x())
             self.control1.setY(point.y())
 
-    def mouseUp(self, event, machine):
+    def mouseUp(self, point, machine):
         if self.control1:
             # Разбиение
-            machine.convex_polygons = machine.decomposer.decompose(machine.points)
+            machine.decompose()
 
         self.control1 = None
 
@@ -88,6 +87,10 @@ class Polygon(Figure):
         self.points = []
 
         self.convex_polygons = []
+
+    def decompose(self):
+        del self.convex_polygons[:]
+        self.convex_polygons = self.decomposer.decompose(self.points)
 
     def draw(self, painter):
 
@@ -124,10 +127,7 @@ class Polygon(Figure):
     def fromDict(dictionary):
         polygon = Polygon()
         polygon.points = [dict2qpoint(d) for d in dictionary['editor']]
-
-        # polygon.convex_polygons = [[dict2qpoint(d) for d in poly] for poly in dictionary['convex']]
-        polygon.convex_polygons = polygon.decomposer.decompose(polygon.points)
-
+        polygon.decompose()
         polygon.state = polygon.control
         return polygon
 

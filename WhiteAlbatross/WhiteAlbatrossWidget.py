@@ -2,7 +2,7 @@
 import json
 import os
 
-from PySide.QtCore import Signal, QDir
+from PySide.QtCore import Signal, QDir, QPoint
 from PySide.QtGui import QWidget, QPainter, QSizePolicy, QPen, QColor, QTransform, QBrush, QImage, QPainterPath
 
 from WhiteAlbatross.Image import Image
@@ -36,30 +36,35 @@ class WhiteAlbatrossWidget(QWidget):
         self.scale = 1.0
 
     def mousePressEvent(self, e):
+
+        point = QPoint(e.pos().x() / self.scale, e.pos().y() / self.scale)
+
         if self.image:
             # проходим по фигурам в изображении
             for figure in self.image.figures:
                 # если какая либо фигура отработала нажатие ...
-                if figure.mouseDown(e):
+                if figure.mouseDown(point):
                     # ... дальше завершаем обход
                     break
             else:
                 new_figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()
-                new_figure.mouseDown(e)
+                new_figure.mouseDown(point)
                 self.image.addFigure(new_figure)
                 self.figuresChanged.emit(self.image.figures)
             self.update()
 
     def mouseMoveEvent(self, e):
+        point = QPoint(e.pos().x() / self.scale, e.pos().y() / self.scale)
         if self.image:
             for figure in self.image.figures:
-                figure.mouseMove(e)
+                figure.mouseMove(point)
             self.update()
 
     def mouseReleaseEvent(self, e):
+        point = QPoint(e.pos().x() / self.scale, e.pos().y() / self.scale)
         if self.image:
             for figure in self.image.figures:
-                figure.mouseUp(e)
+                figure.mouseUp(point)
             self.update()
             self.figuresChanged.emit(self.image.figures)
 
