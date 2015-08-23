@@ -36,6 +36,7 @@ class AddPoint(State):
 
             # ... и переходим в состояние управление ломаной
             machine.state = machine.control
+            return True
 
         # в любом оставшемся случае добавляем точку в ломаную
         machine.points.append(event.pos())
@@ -64,8 +65,7 @@ class Control(State):
     def mouseUp(self, event, machine):
         if self.control1:
             # Разбиение
-            # machine.convex_polygons = machine.decomposer.decompose(machine.decomposer.make_ccw(machine.points))
-            pass
+            machine.convex_polygons = machine.decomposer.decompose(machine.points)
 
         self.control1 = None
 
@@ -91,6 +91,7 @@ class Polygon(Figure):
 
     def draw(self, painter):
 
+        painter.save()
         painter.setPen(QPen(QBrush(QColor(232, 109, 21) if self.state is self.add_point else
                                    QColor(21, 144, 232)),
                             1,
@@ -113,6 +114,7 @@ class Polygon(Figure):
             painter.drawEllipse(point, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
 
         Figure.draw(self, painter)
+        painter.restore()
 
     def getDict(self):
         return {'polygon': {'editor': [qpoint2dict(point) for point in self.points],
@@ -122,8 +124,8 @@ class Polygon(Figure):
     def fromDict(dictionary):
         polygon = Polygon()
         polygon.points = [dict2qpoint(d) for d in dictionary['editor']]
-        # polygon.convex_polygons = [[dict2qpoint(d) for d in poly] for poly in dictionary['convex']]
 
+        # polygon.convex_polygons = [[dict2qpoint(d) for d in poly] for poly in dictionary['convex']]
         polygon.convex_polygons = polygon.decomposer.decompose(polygon.points)
 
         polygon.state = polygon.control

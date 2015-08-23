@@ -95,6 +95,7 @@ class Circle(Figure):
         self.ctrl = ctrl
 
     def draw(self, painter):
+        painter.save()
         if not self.center.isNull() and not self.ctrl.isNull():
             radius = distance(self.center, self.ctrl)
             painter.setPen(QPen(QBrush(QColor(232, 109, 21) if self.state is not self.control else
@@ -110,6 +111,7 @@ class Circle(Figure):
             painter.drawEllipse(self.ctrl, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
 
         Figure.draw(self, painter)
+        painter.restore()
 
     def getDict(self):
         return {

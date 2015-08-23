@@ -88,6 +88,7 @@ class Rectangle(Figure):
         # painter_path.addRect(self.x1, self.y1, self.x2, self.y2)
         # painter.drawPath(painter_path)
 
+        painter.save()
         if not self.p1.isNull() and not self.p2.isNull():
             painter.setPen(QPen(QBrush(QColor(232, 109, 21) if self.state is not self.control else
                                        QColor(21, 144, 232)),
@@ -102,6 +103,7 @@ class Rectangle(Figure):
             painter.drawEllipse(self.p2, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
 
         Figure.draw(self, painter)
+        painter.restore()
 
     def getDict(self):
         return {

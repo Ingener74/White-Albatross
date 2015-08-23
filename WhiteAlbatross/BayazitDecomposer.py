@@ -141,12 +141,12 @@ class BayazitDecomposer(object):
                         if lower_index != 0:
                             upper_poly += poly[lower_index:]
 
-                        upper_poly += poly[0:i + 1]
+                        upper_poly += poly[:i + 1]
                     else:
                         if i != 0:
                             lower_poly += poly[i:]
 
-                        lower_poly += poly[0:upper_index + 1]
+                        lower_poly += poly[:upper_index + 1]
                         lower_poly.append(p)
                         upper_poly.append(p)
 
@@ -171,12 +171,12 @@ class BayazitDecomposer(object):
                         if closest_index != 0:
                             upper_poly += poly[closest_index:]
 
-                        upper_poly += poly[0:i + 1]
+                        upper_poly += poly[:i + 1]
                     else:
                         if i != 0:
                             lower_poly += poly[i:]
 
-                        lower_poly += poly[0:closest_index + 1]
+                        lower_poly += poly[:closest_index + 1]
                         upper_poly += poly[closest_index:i + 1]
 
                 if len(lower_poly) < len(upper_poly):
@@ -185,11 +185,11 @@ class BayazitDecomposer(object):
                 else:
                     self.decompose(upper_poly)
                     self.decompose(lower_poly)
-
-                return self.polys
+                return
 
         self.polys.append(poly)
 
     def decompose(self, poly):
-        return self.__decompose(self.__make_ccw(poly))
+        self.__decompose(self.__make_ccw(poly))
+        return self.polys
 
