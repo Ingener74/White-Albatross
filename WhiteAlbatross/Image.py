@@ -12,9 +12,11 @@ class Image(object):
     def __init__(self, directory, file_name, json_dict=None):
         self.directory = directory
         self.file_name = file_name
-        self.figures = [Rectangle.fromDict(js_dictionary['rect']) if js_dictionary.keys()[0] == 'rect' else
-                        Circle.fromDict(js_dictionary['circle']) if js_dictionary.keys()[0] == 'circle' else
-                        Polygon.fromDict(js_dictionary['polygon']) for js_dictionary in json_dict]
+        self.figures = []
+        if json_dict:
+            self.figures = [Rectangle.fromDict(js_dictionary['rect']) if js_dictionary.keys()[0] == 'rect' else
+                            Circle.fromDict(js_dictionary['circle']) if js_dictionary.keys()[0] == 'circle' else
+                            Polygon.fromDict(js_dictionary['polygon']) for js_dictionary in json_dict]
 
     def draw(self, painter):
         qimage = QImage(self.directory.path() + QDir.separator() + self.file_name)

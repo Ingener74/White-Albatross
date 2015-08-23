@@ -94,8 +94,11 @@ class WhiteAlbatrossWidget(QWidget):
         json_file_name = self.directory.path() + QDir.separator() + 'box2d.json'
 
         if os.path.exists(json_file_name):
-            with open(json_file_name) as f:
-                self.images = [Image(self.directory, image['file_name'], image['figures']) for image in json.load(f)]
+            try:
+                with open(json_file_name) as f:
+                    self.images = [Image(self.directory, image['file_name'], image['figures']) for image in json.load(f)]
+            except ValueError, e:
+                self.images = [Image(self.directory, image) for image in images]
         else:
             self.images = [Image(self.directory, image) for image in images]
 

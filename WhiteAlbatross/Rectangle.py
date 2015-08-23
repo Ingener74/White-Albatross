@@ -1,5 +1,5 @@
 # encoding: utf8
-from PySide.QtCore import QRect, QPoint
+from PySide.QtCore import QRect, QPoint, Qt
 from PySide.QtGui import QPainterPath, QPen, QBrush, QColor
 
 from WhiteAlbatross.Figure import distance, Figure
@@ -89,8 +89,16 @@ class Rectangle(Figure):
         # painter.drawPath(painter_path)
 
         if not self.p1.isNull() and not self.p2.isNull():
+            painter.setPen(QPen(QBrush(QColor(232, 109, 21) if self.state is not self.control else
+                                       QColor(21, 144, 232)),
+                                2,
+                                Qt.SolidLine))
             painter.drawRect(QRect(self.p1, self.p2))
+
+            painter.setPen(QPen(QBrush(QColor(31, 174, 222)), 2, Qt.SolidLine))
             painter.drawEllipse(self.p1, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
+
+            painter.setPen(QPen(QBrush(QColor(222, 79, 31)), 2, Qt.SolidLine))
             painter.drawEllipse(self.p2, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
 
         Figure.draw(self, painter)

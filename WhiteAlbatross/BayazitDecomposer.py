@@ -68,7 +68,7 @@ class BayazitDecomposer(object):
 
         self.polys = []
 
-    def make_ccw(self, poly):
+    def __make_ccw(self, poly):
         br = 0
 
         for i, p in enumerate(poly):
@@ -76,13 +76,12 @@ class BayazitDecomposer(object):
                 br = i
 
         if not left(poly[br - 1], poly[br], poly[(br + 1) if len(poly) > (br + 1) else 0]):
-            print u'Переверул ломаную по часовой стрелке'
+            # print u'Переверул ломаную по часовой стрелке'
             return poly[::-1]
-        print u'Ломаная по часовой стрелке'
+        # print u'Ломаная по часовой стрелке'
         return poly[:]
 
-    def decompose(self, poly):
-
+    def __decompose(self, poly):
         lower_poly = []
         upper_poly = []
 
@@ -190,3 +189,7 @@ class BayazitDecomposer(object):
                 return self.polys
 
         self.polys.append(poly)
+
+    def decompose(self, poly):
+        return self.__decompose(self.__make_ccw(poly))
+

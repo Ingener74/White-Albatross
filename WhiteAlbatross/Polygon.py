@@ -32,7 +32,7 @@ class AddPoint(State):
         # Если у нас больше 1 точки и мы тыкаем в последнюю тогда ...
         if len(machine.points) > 1 and distance(machine.points[-1], event.pos()) < Figure.CTRL_RADIUS:
             # ... делаем декомпозицию ломаной и ...
-            machine.convex_polygons = machine.decomposer.decompose(machine.decomposer.make_ccw(machine.points))
+            machine.convex_polygons = machine.decomposer.decompose(machine.points)
 
             # ... и переходим в состояние управление ломаной
             machine.state = machine.control
@@ -122,7 +122,10 @@ class Polygon(Figure):
     def fromDict(dictionary):
         polygon = Polygon()
         polygon.points = [dict2qpoint(d) for d in dictionary['editor']]
-        polygon.convex_polygons = [[dict2qpoint(d) for d in poly] for poly in dictionary['convex']]
+        # polygon.convex_polygons = [[dict2qpoint(d) for d in poly] for poly in dictionary['convex']]
+
+        polygon.convex_polygons = polygon.decomposer.decompose(polygon.points)
+
         polygon.state = polygon.control
         return polygon
 

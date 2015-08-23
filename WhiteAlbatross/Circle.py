@@ -1,6 +1,8 @@
 # encoding: utf8
 
-from PySide.QtCore import QPoint
+from PySide.QtCore import QPoint, Qt
+from PySide.QtGui import QPen, QColor
+from PySide.QtGui import QBrush
 
 from WhiteAlbatross.Figure import distance, Figure
 from WhiteAlbatross.State import State
@@ -95,8 +97,16 @@ class Circle(Figure):
     def draw(self, painter):
         if not self.center.isNull() and not self.ctrl.isNull():
             radius = distance(self.center, self.ctrl)
+            painter.setPen(QPen(QBrush(QColor(232, 109, 21) if self.state is not self.control else
+                                       QColor(21, 144, 232)),
+                                2,
+                                Qt.SolidLine))
             painter.drawEllipse(self.center, radius, radius)
+
+            painter.setPen(QPen(QBrush(QColor(31, 174, 222)), 2, Qt.SolidLine))
             painter.drawEllipse(self.center, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
+
+            painter.setPen(QPen(QBrush(QColor(222, 79, 31)), 2, Qt.SolidLine))
             painter.drawEllipse(self.ctrl, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
 
         Figure.draw(self, painter)
