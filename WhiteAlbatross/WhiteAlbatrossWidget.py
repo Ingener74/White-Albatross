@@ -2,13 +2,77 @@
 import json
 import os
 
-from PySide.QtCore import Signal, QDir, QPoint
+from PySide.QtCore import Signal, QDir, QPoint, Qt
 from PySide.QtGui import QWidget, QPainter, QSizePolicy, QPen, QColor, QTransform, QBrush, QImage, QPainterPath
 
 from WhiteAlbatross.Image import Image
 from WhiteAlbatross.Rectangle import Rectangle
 from WhiteAlbatross.Circle import Circle
 from WhiteAlbatross.Polygon import Polygon
+from WhiteAlbatross.State import State
+
+
+class FigureAdding(State):
+    def __init__(self):
+        State.__init__(self)
+
+    def mouseDown(self, point, machine):
+        if machine.image:
+            # проходим по фигурам в изображении
+            for figure in machine.image.figures:
+                # если какая либо фигура отработала нажатие ...
+                if figure.mouseDown(point):
+                    # ... дальше завершаем обход
+                    break
+            else:
+                new_figure = WhiteAlbatrossWidget.FIGURE_TYPES[machine.type]()
+                new_figure.mouseDown(point)
+                machine.image.addFigure(new_figure)
+                machine.figuresChanged.emit(machine.image.figures)
+            machine.update()
+        return False
+
+    def mouseMove(self, point, machine):
+        if machine.image:
+            for figure in machine.image.figures:
+                figure.mouseMove(point)
+            machine.update()
+
+    def mouseUp(self, point, machine):
+        if machine.image:
+            for figure in machine.image.figures:
+                figure.mouseUp(point)
+            machine.update()
+            machine.figuresChanged.emit(machine.image.figures)
+
+    def draw(self, painter):
+        pass
+
+
+class MovingImage(State):
+    def __init__(self):
+        State.__init__(self)
+        self.start = QPoint(0, 0)
+
+        self.old_offset = QPoint()
+
+    def mouseDown(self, point, machine):
+        self.start = point * machine.scale + machine.offset
+        self.old_offset = machine.offset
+        return False
+
+    def mouseMove(self, point, machine):
+        machine.offset = self.old_offset + ((point * machine.scale + machine.offset) - self.start)
+        machine.update()
+        pass
+
+    def mouseUp(self, point, machine):
+        machine.offset = self.old_offset + ((point * machine.scale + machine.offset) - self.start)
+        machine.update()
+        pass
+
+    def draw(self, painter):
+        pass
 
 
 # noinspection PyPep8Naming
@@ -33,40 +97,30 @@ class WhiteAlbatrossWidget(QWidget):
         self.images = []
 
         self.image = None
+
+        self.offset = QPoint()
         self.scale = 1.0
 
+        self.figure_adding = FigureAdding()
+        self.moving_image = MovingImage()
+        self.state = self.figure_adding
+
+    def get_point(self, point):
+        return point / self.scale - self.offset
+
     def mousePressEvent(self, e):
+        if e.button() is Qt.MidButton or e.button() is Qt.MiddleButton:
+            self.state = self.moving_image
+        else:
+            self.state = self.figure_adding
 
-        point = QPoint(e.pos().x() / self.scale, e.pos().y() / self.scale)
-
-        if self.image:
-            # проходим по фигурам в изображении
-            for figure in self.image.figures:
-                # если какая либо фигура отработала нажатие ...
-                if figure.mouseDown(point):
-                    # ... дальше завершаем обход
-                    break
-            else:
-                new_figure = WhiteAlbatrossWidget.FIGURE_TYPES[self.type]()
-                new_figure.mouseDown(point)
-                self.image.addFigure(new_figure)
-                self.figuresChanged.emit(self.image.figures)
-            self.update()
+        self.state.mouseDown(self.get_point(e.pos()), self)
 
     def mouseMoveEvent(self, e):
-        point = QPoint(e.pos().x() / self.scale, e.pos().y() / self.scale)
-        if self.image:
-            for figure in self.image.figures:
-                figure.mouseMove(point)
-            self.update()
+        self.state.mouseMove(self.get_point(e.pos()), self)
 
     def mouseReleaseEvent(self, e):
-        point = QPoint(e.pos().x() / self.scale, e.pos().y() / self.scale)
-        if self.image:
-            for figure in self.image.figures:
-                figure.mouseUp(point)
-            self.update()
-            self.figuresChanged.emit(self.image.figures)
+        self.state.mouseUp(self.get_point(e.pos()), self)
 
     def wheelEvent(self, e):
         self.scale += e.delta() / 1200.0
@@ -81,7 +135,7 @@ class WhiteAlbatrossWidget(QWidget):
         painter.fillPath(painter_path,
                          QBrush(QImage(':/main/background.png')))
 
-        painter.setTransform(QTransform().scale(self.scale, self.scale))
+        painter.setTransform(QTransform().scale(self.scale, self.scale).translate(self.offset.x(), self.offset.y()))
         if self.image:
             old_pen = painter.pen()
 
