@@ -16,12 +16,13 @@ class FigureAdding(State):
     def __init__(self):
         State.__init__(self)
 
-    def mouseDown(self, point, machine):
+    def mouseDown(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         if machine.image:
             # проходим по фигурам в изображении
             for figure in machine.image.figures:
                 # если какая либо фигура отработала нажатие ...
-                if figure.mouseDown(point):
+                if figure.mouseDown(*args, **kwargs):
                     # ... дальше завершаем обход
                     break
             else:
@@ -32,16 +33,18 @@ class FigureAdding(State):
             machine.update()
         return False
 
-    def mouseMove(self, point, machine):
+    def mouseMove(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         if machine.image:
             for figure in machine.image.figures:
-                figure.mouseMove(point)
+                figure.mouseMove(*args, **kwargs)
             machine.update()
 
-    def mouseUp(self, point, machine):
+    def mouseUp(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         if machine.image:
             for figure in machine.image.figures:
-                figure.mouseUp(point)
+                figure.mouseUp(*args, **kwargs)
             machine.update()
             machine.figuresChanged.emit(machine.image.figures)
 
@@ -56,17 +59,20 @@ class MovingImage(State):
 
         self.old_offset = QPoint()
 
-    def mouseDown(self, point, machine):
+    def mouseDown(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         self.start = point * machine.scale + machine.offset
         self.old_offset = machine.offset
         return False
 
-    def mouseMove(self, point, machine):
+    def mouseMove(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         machine.offset = self.old_offset + ((point * machine.scale + machine.offset) - self.start)
         machine.update()
         pass
 
-    def mouseUp(self, point, machine):
+    def mouseUp(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         machine.offset = self.old_offset + ((point * machine.scale + machine.offset) - self.start)
         machine.update()
         pass
@@ -114,13 +120,13 @@ class WhiteAlbatrossWidget(QWidget):
         else:
             self.state = self.figure_adding
 
-        self.state.mouseDown(self.get_point(e.pos()), self)
+        self.state.mouseDown(self, point=self.get_point(e.pos()))
 
     def mouseMoveEvent(self, e):
-        self.state.mouseMove(self.get_point(e.pos()), self)
+        self.state.mouseMove(self, point=self.get_point(e.pos()))
 
     def mouseReleaseEvent(self, e):
-        self.state.mouseUp(self.get_point(e.pos()), self)
+        self.state.mouseUp(self, point=self.get_point(e.pos()))
 
     def wheelEvent(self, e):
         self.scale += e.delta() / 1200.0

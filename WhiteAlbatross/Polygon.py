@@ -23,7 +23,8 @@ class AddPoint(State):
     def __init__(self):
         State.__init__(self)
 
-    def mouseDown(self, point, machine):
+    def mouseDown(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         # Если нажатие в какой нибудь точке кроме последней то просто ничего не делаем и выходим
         for p in machine.points:
             if distance(p, point) < Figure.CTRL_RADIUS and p is not machine.points[-1]:
@@ -49,19 +50,21 @@ class Control(State):
 
         self.control1 = None
 
-    def mouseDown(self, point, machine):
+    def mouseDown(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         for p in machine.points:
             if distance(p, point) < Figure.CTRL_RADIUS:
                 self.control1 = p
                 return True
         return False
 
-    def mouseMove(self, point, machine):
+    def mouseMove(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         if self.control1:
             self.control1.setX(point.x())
             self.control1.setY(point.y())
 
-    def mouseUp(self, point, machine):
+    def mouseUp(self, machine, *args, **kwargs):
         if self.control1:
             # Разбиение
             machine.decompose()

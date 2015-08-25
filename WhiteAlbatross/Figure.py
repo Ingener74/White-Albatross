@@ -34,14 +34,14 @@ class Figure(object):
     def __init__(self, state):
         self.state = state
 
-    def mouseDown(self, point):
-        return self.state.mouseDown(point, self)
+    def mouseDown(self, *args, **kwargs):
+        return self.state.mouseDown(self, *args, **kwargs)
 
-    def mouseMove(self, point):
-        self.state.mouseMove(point, self)
+    def mouseMove(self, *args, **kwargs):
+        self.state.mouseMove(self, *args, **kwargs)
 
-    def mouseUp(self, point):
-        self.state.mouseUp(point, self)
+    def mouseUp(self, *args, **kwargs):
+        self.state.mouseUp(self, *args, **kwargs)
 
     def draw(self, painter):
         self.state.draw(painter)

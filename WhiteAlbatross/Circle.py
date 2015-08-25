@@ -16,7 +16,8 @@ class FirstPoint(State):
     def __init__(self):
         State.__init__(self)
 
-    def mouseDown(self, point, machine):
+    def mouseDown(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         machine.center = point
         machine.state = machine.second_point
         return True
@@ -30,14 +31,17 @@ class SecondPoint(State):
     def __init__(self):
         State.__init__(self)
 
-    def mouseDown(self, point, machine):
+    def mouseDown(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         machine.ctrl = point
         return True
 
-    def mouseMove(self, point, machine):
+    def mouseMove(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         machine.ctrl = point
 
-    def mouseUp(self, point, machine):
+    def mouseUp(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         machine.ctrl = point
         if distance(machine.center, point) > Figure.CTRL_RADIUS:
             machine.state = machine.control
@@ -52,7 +56,8 @@ class Control(State):
         State.__init__(self)
         self.point = None
 
-    def mouseDown(self, point, machine):
+    def mouseDown(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         if distance(machine.center, point) < Figure.CTRL_RADIUS:
             self.point = machine.center
         if distance(machine.ctrl, point) < Figure.CTRL_RADIUS:
@@ -70,7 +75,8 @@ class Control(State):
         else:
             return False
 
-    def mouseMove(self, point, machine):
+    def mouseMove(self, machine, *args, **kwargs):
+        point = kwargs.get('point')
         if self.point and self.point == machine.center:
             delta = point - machine.center
             machine.center += delta
@@ -79,7 +85,7 @@ class Control(State):
             machine.ctrl.setX(point.x())
             machine.ctrl.setY(point.y())
 
-    def mouseUp(self, point, machine):
+    def mouseUp(self, machine, *args, **kwargs):
         self.point = None
 
 

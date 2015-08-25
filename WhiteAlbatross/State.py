@@ -6,13 +6,13 @@ class State(object):
     def __init__(self):
         pass
 
-    def mouseDown(self, point, machine):
+    def mouseDown(self, machine, *args, **kwargs):
         return False
 
-    def mouseMove(self, point, machine):
+    def mouseMove(self, machine, *args, **kwargs):
         pass
 
-    def mouseUp(self, point, machine):
+    def mouseUp(self, machine, *args, **kwargs):
         pass
 
     def draw(self, painter):
