@@ -11,7 +11,7 @@ class FirstPoint(State):
         State.__init__(self)
 
     def mouseDown(self, machine, *args, **kwargs):
-        machine.p1 = kwargs.get('point')
+        machine.p1 = kwargs['point']
         machine.state = machine.second_point
         return True
 
