@@ -34,14 +34,12 @@ class FigureAdding(State):
         return False
 
     def mouseMove(self, machine, *args, **kwargs):
-        point = kwargs.get('point')
         if machine.image:
             for figure in machine.image.figures:
                 figure.mouseMove(*args, **kwargs)
             machine.update()
 
     def mouseUp(self, machine, *args, **kwargs):
-        point = kwargs.get('point')
         if machine.image:
             for figure in machine.image.figures:
                 figure.mouseUp(*args, **kwargs)
