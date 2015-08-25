@@ -27,7 +27,7 @@ class FigureAdding(State):
                     break
             else:
                 new_figure = WhiteAlbatrossWidget.FIGURE_TYPES[machine.type]()
-                new_figure.mouseDown(point)
+                new_figure.mouseDown(point=point)
                 machine.image.addFigure(new_figure)
                 machine.figuresChanged.emit(machine.image.figures)
             machine.update()
