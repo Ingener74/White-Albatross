@@ -27,11 +27,11 @@ class AddPoint(State):
         point = kwargs.get('point')
         # Если нажатие в какой нибудь точке кроме последней то просто ничего не делаем и выходим
         for p in machine.points:
-            if distance(p, point) < Figure.CTRL_RADIUS and p is not machine.points[-1]:
+            if Figure.pointIsControl(p, point) and p is not machine.points[-1]:
                 return True  # новую фигуру добавлять не надо
 
         # Если у нас больше 1 точки и мы тыкаем в последнюю тогда ...
-        if len(machine.points) > 1 and distance(machine.points[-1], point) < Figure.CTRL_RADIUS:
+        if len(machine.points) > 1 and Figure.pointIsControl(machine.points[-1], point):
             # ... делаем декомпозицию ломаной и ...
             machine.decompose()
 
@@ -53,8 +53,14 @@ class Control(State):
     def mouseDown(self, machine, *args, **kwargs):
         point = kwargs.get('point')
         for p in machine.points:
-            if distance(p, point) < Figure.CTRL_RADIUS:
-                self.control1 = p
+            if Figure.pointIsControl(p, point):
+                if 'event' in kwargs and kwargs['event'].button() is Qt.RightButton:
+                    del machine.points[machine.points.index(p)]
+                    machine.decompose()
+                    if len(machine.points) < 3:
+                        machine.state = machine.delete
+                else:
+                    self.control1 = p
                 return True
         return False
 

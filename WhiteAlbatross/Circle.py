@@ -43,7 +43,7 @@ class SecondPoint(State):
     def mouseUp(self, machine, *args, **kwargs):
         point = kwargs['point']
         machine.ctrl = point
-        if distance(machine.center, point) > Figure.CTRL_RADIUS:
+        if not Figure.pointIsControl(machine.center, point):
             machine.state = machine.control
 
 
@@ -93,14 +93,19 @@ class Control(State):
 
 # noinspection PyPep8Naming
 class Circle(Figure):
-    def __init__(self, *args, **kwargs):  # center=QPoint(), ctrl=QPoint(),
+    def __init__(self, *args, **kwargs):
         self.first_point = FirstPoint()
         self.second_point = SecondPoint()
         self.control = Control()
 
         Figure.__init__(self, self.first_point)
-        if 'center' in kwargs and 'ctrl' in kwargs:
+
+        self.center = QPoint()
+        self.ctrl = QPoint()
+
+        if 'center' in kwargs:
             self.center = kwargs['center']
+        if 'ctrl' in kwargs:
             self.ctrl = kwargs['ctrl']
         if 'figure' in kwargs:
             self.center = QPoint(kwargs['figure']['center']['x'],

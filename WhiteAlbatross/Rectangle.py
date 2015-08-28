@@ -2,7 +2,7 @@
 from PySide.QtCore import QRect, QPoint, Qt
 from PySide.QtGui import QPainterPath, QPen, QBrush, QColor
 
-from WhiteAlbatross.Figure import distance, Figure
+from WhiteAlbatross.Figure import Figure
 from WhiteAlbatross.State import State
 
 
@@ -29,7 +29,7 @@ class SecondPoint(State):
 
     def mouseUp(self, machine, *args, **kwargs):
         machine.p2 = kwargs['point']
-        if distance(machine.p1, kwargs['point']) > Figure.CTRL_RADIUS:
+        if not Figure.pointIsControl(machine.p1, kwargs['point']):
             machine.state = machine.control
 
 
