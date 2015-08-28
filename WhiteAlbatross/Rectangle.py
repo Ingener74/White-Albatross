@@ -70,15 +70,32 @@ class Control(State):
 
 # noinspection PyPep8Naming
 class Rectangle(Figure):
-    def __init__(self, x1=0, y1=0, x2=0, y2=0):
+    def __init__(self, *args, **kwargs):
 
         self.first_point = FirstPoint()
         self.second_point = SecondPoint()
         self.control = Control()
 
         Figure.__init__(self, self.first_point)
-        self.p1 = QPoint(x1, y1)
-        self.p2 = QPoint(x2, y2)
+        if 'x1' in kwargs and 'y1' in kwargs:
+            self.p1 = QPoint(kwargs['x1'], kwargs['y1'])
+        if 'x2' in kwargs and 'y2' in kwargs:
+            self.p2 = QPoint(kwargs['x2'], kwargs['y2'])
+        if 'p1' in kwargs:
+            self.p1 = kwargs['p1']
+        if 'p2' in kwargs:
+            self.p2 = kwargs['p2']
+        if len(args) == 2:
+            self.p1 = args[0]
+            self.p2 = args[1]
+        if len(args) == 4:
+            self.p1 = QPoint(args[0], args[1])
+            self.p2 = QPoint(args[2], args[3])
+
+        if 'figure' in kwargs:
+            self.p1 = QPoint(kwargs['figure']['x1'], kwargs['figure']['y1'])
+            self.p2 = QPoint(kwargs['figure']['x2'], kwargs['figure']['y2'])
+            self.state = self.control
 
     def draw(self, painter):
 
@@ -116,12 +133,6 @@ class Rectangle(Figure):
                 'y2': self.p2.y()
             }
         }
-
-    @staticmethod
-    def fromDict(dictionary):
-        rect = Rectangle(dictionary['x1'], dictionary['y1'], dictionary['x2'], dictionary['y2'])
-        rect.state = rect.control
-        return rect
 
     def __str__(self):
         return self.__repr__()

@@ -78,7 +78,7 @@ class Control(State):
 
 # noinspection PyPep8Naming
 class Polygon(Figure):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
 
         self.add_point = AddPoint()
         self.control = Control()
@@ -88,8 +88,15 @@ class Polygon(Figure):
         self.decomposer = BayazitDecomposer()
 
         self.points = []
-
         self.convex_polygons = []
+
+        if 'figure' in kwargs:
+            self.points = [dict2qpoint(p) for p in kwargs['figure']['editor']]
+            self.decompose()
+            self.state = self.control
+
+        if len(args) > 0:
+            self.points = args
 
     def decompose(self):
         del self.convex_polygons[:]
@@ -125,14 +132,6 @@ class Polygon(Figure):
     def getDict(self):
         return {'polygon': {'editor': [qpoint2dict(point) for point in self.points],
                             'convex': [[qpoint2dict(point) for point in convex] for convex in self.convex_polygons]}}
-
-    @staticmethod
-    def fromDict(dictionary):
-        polygon = Polygon()
-        polygon.points = [dict2qpoint(d) for d in dictionary['editor']]
-        polygon.decompose()
-        polygon.state = polygon.control
-        return polygon
 
     def __str__(self):
         return self.__repr__()

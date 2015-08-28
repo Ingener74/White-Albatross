@@ -9,14 +9,14 @@ from WhiteAlbatross.Polygon import Polygon
 
 # noinspection PyPep8Naming
 class Image(object):
-    def __init__(self, directory, file_name, json_dict=None):
+    def __init__(self, directory, file_name, image_figures=None):
         self.directory = directory
         self.file_name = file_name
         self.figures = []
-        if json_dict:
-            self.figures = [Rectangle.fromDict(js_dictionary['rect']) if js_dictionary.keys()[0] == 'rect' else
-                            Circle.fromDict(js_dictionary['circle']) if js_dictionary.keys()[0] == 'circle' else
-                            Polygon.fromDict(js_dictionary['polygon']) for js_dictionary in json_dict]
+        if image_figures:
+            self.figures = [Rectangle(figure=figure_dict['rect']) if figure_dict.keys()[0] == 'rect' else
+                            Circle(figure=figure_dict['circle']) if figure_dict.keys()[0] == 'circle' else
+                            Polygon(figure=figure_dict['polygon']) for figure_dict in image_figures]
 
     def draw(self, painter):
         qimage = QImage(self.directory.path() + QDir.separator() + self.file_name)

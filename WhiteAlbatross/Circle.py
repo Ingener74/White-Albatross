@@ -91,14 +91,27 @@ class Control(State):
 
 # noinspection PyPep8Naming
 class Circle(Figure):
-    def __init__(self, center=QPoint(), ctrl=QPoint()):
+    def __init__(self, *args, **kwargs):  # center=QPoint(), ctrl=QPoint(),
         self.first_point = FirstPoint()
         self.second_point = SecondPoint()
         self.control = Control()
 
         Figure.__init__(self, self.first_point)
-        self.center = center
-        self.ctrl = ctrl
+        if 'center' in kwargs and 'ctrl' in kwargs:
+            self.center = kwargs['center']
+            self.ctrl = kwargs['ctrl']
+        if 'figure' in kwargs:
+            self.center = QPoint(kwargs['figure']['center']['x'],
+                                 kwargs['figure']['center']['y'])
+            self.ctrl = QPoint(kwargs['figure']['ctrl']['x'],
+                               kwargs['figure']['ctrl']['y'])
+            self.state = self.control
+        if len(args) == 2:
+            self.center = args[0]
+            self.ctrl = args[1]
+        if len(args) == 4:
+            self.center = QPoint(args[0], args[1])
+            self.ctrl = QPoint(args[2], args[3])
 
     def draw(self, painter):
         painter.save()
@@ -132,15 +145,6 @@ class Circle(Figure):
                 }
             }
         }
-
-    @staticmethod
-    def fromDict(dictionary):
-        circle = Circle(QPoint(dictionary['center']['x'],
-                               dictionary['center']['y']),
-                        QPoint(dictionary['ctrl']['x'],
-                               dictionary['ctrl']['y']))
-        circle.state = circle.control
-        return circle
 
     def __str__(self):
         return self.__repr__()
