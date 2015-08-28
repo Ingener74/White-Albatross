@@ -2,7 +2,7 @@
 from PySide.QtCore import Qt, QPoint
 from PySide.QtGui import QPolygon, QPen, QColor, QBrush
 
-from WhiteAlbatross.Figure import Figure, distance
+from WhiteAlbatross.Figure import Figure
 from WhiteAlbatross.State import State
 from WhiteAlbatross.BayazitDecomposer import BayazitDecomposer
 
@@ -51,9 +51,8 @@ class Control(State):
         self.control1 = None
 
     def mouseDown(self, machine, *args, **kwargs):
-        point = kwargs.get('point')
         for p in machine.points:
-            if Figure.pointIsControl(p, point):
+            if Figure.pointIsControl(p, kwargs['point']):
                 if 'event' in kwargs and kwargs['event'].button() is Qt.RightButton:
                     del machine.points[machine.points.index(p)]
                     machine.decompose()

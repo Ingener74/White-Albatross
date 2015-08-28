@@ -1,24 +1,21 @@
 # encoding: utf8
 import sys
 
-from PySide.QtCore import Qt, QSettings, QDir, QDirIterator
-from PySide.QtGui import QApplication, QWidget, QFileDialog
+from PySide.QtCore import (Qt, QSettings, QDir, QDirIterator)
+from PySide.QtGui import (QApplication, QWidget, QFileDialog)
 
 from WhiteAlbatross import WhiteAlbatrossWidget
 from GhastlyLion import Ui_GhastlyLion
 
-SELECTED_IMAGE = 'selected_image'
+COMPANY = 'Venus.Games'
+APPNAME = 'GhastlyLion'
 
+SELECTED_IMAGE = 'selected_image'
 SPLITTER = 'splitter'
 LAST_FIGURE_TYPE = 'last_figure_type'
 CURRENT_DIRECTORY = 'current_directory'
 
-COMPANY = 'Venus.Games'
-APPNAME = 'GhastlyLion'
-
-
 """
-2. Улучшить управление фигурами: добавлять, удалять точки, фигуры
 """
 
 
