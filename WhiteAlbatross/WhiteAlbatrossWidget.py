@@ -43,6 +43,9 @@ class FigureAdding(State):
         if machine.image:
             for figure in machine.image.figures:
                 figure.mouseUp(*args, **kwargs)
+                if figure.state == figure.delete:
+                    del machine.image.figures[machine.image.figures.index(figure)]
+                    break
             machine.update()
             machine.figuresChanged.emit(machine.image.figures)
 
@@ -58,19 +61,19 @@ class MovingImage(State):
         self.old_offset = QPoint()
 
     def mouseDown(self, machine, *args, **kwargs):
-        point = kwargs.get('point')
+        point = kwargs['point']
         self.start = point * machine.scale + machine.offset
         self.old_offset = machine.offset
         return False
 
     def mouseMove(self, machine, *args, **kwargs):
-        point = kwargs.get('point')
+        point = kwargs['point']
         machine.offset = self.old_offset + ((point * machine.scale + machine.offset) - self.start)
         machine.update()
         pass
 
     def mouseUp(self, machine, *args, **kwargs):
-        point = kwargs.get('point')
+        point = kwargs['point']
         machine.offset = self.old_offset + ((point * machine.scale + machine.offset) - self.start)
         machine.update()
         pass
@@ -118,7 +121,7 @@ class WhiteAlbatrossWidget(QWidget):
         else:
             self.state = self.figure_adding
 
-        self.state.mouseDown(self, point=self.get_point(e.pos()))
+        self.state.mouseDown(self, point=self.get_point(e.pos()), event=e)
 
     def mouseMoveEvent(self, e):
         self.state.mouseMove(self, point=self.get_point(e.pos()))

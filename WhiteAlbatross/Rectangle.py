@@ -40,13 +40,17 @@ class Control(State):
 
     def mouseDown(self, machine, *args, **kwargs):
         point = kwargs['point']
-        if distance(machine.p1, point) < Figure.CTRL_RADIUS:
+        if Figure.pointIsControl(machine.p1, point):
             self.point = machine.p1
-        if distance(machine.p2, point) < Figure.CTRL_RADIUS:
+        if Figure.pointIsControl(machine.p2, point):
             self.point = machine.p2
+
         if self.point:
-            self.point.setX(point.x())
-            self.point.setY(point.y())
+            if 'event' in kwargs and kwargs['event'].button() == Qt.RightButton:
+                machine.state = machine.delete
+            else:
+                self.point.setX(point.x())
+                self.point.setY(point.y())
             return True
         else:
             return False
@@ -75,6 +79,9 @@ class Rectangle(Figure):
         self.first_point = FirstPoint()
         self.second_point = SecondPoint()
         self.control = Control()
+
+        self.p1 = QPoint()
+        self.p2 = QPoint()
 
         Figure.__init__(self, self.first_point)
         if 'x1' in kwargs and 'y1' in kwargs:
