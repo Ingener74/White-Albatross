@@ -26,12 +26,12 @@ class AddPoint(State):
     def mouseDown(self, machine, *args, **kwargs):
         point = kwargs.get('point')
         # Если нажатие в какой нибудь точке кроме последней то просто ничего не делаем и выходим
-        for p in machine.points:
-            if Figure.pointIsControl(p, point) and p is not machine.points[-1]:
+        for p in machine.polygon:
+            if Figure.pointIsControl(p, point) and p is not machine.polygon[-1]:
                 return True  # новую фигуру добавлять не надо
 
         # Если у нас больше 1 точки и мы тыкаем в последнюю тогда ...
-        if len(machine.points) > 1 and Figure.pointIsControl(machine.points[-1], point):
+        if len(machine.polygon) > 1 and Figure.pointIsControl(machine.polygon[-1], point):
             # ... делаем декомпозицию ломаной и ...
             machine.decompose()
 
@@ -40,7 +40,7 @@ class AddPoint(State):
             return True
 
         # в любом оставшемся случае добавляем точку в ломаную
-        machine.points.append(point)
+        machine.polygon.append(point)
         return True  # новую фигуру добавлять не надо
 
 
@@ -51,13 +51,14 @@ class Control(State):
         self.control1 = None
 
     def mouseDown(self, machine, *args, **kwargs):
-        for p in machine.points:
+        for p in machine.polygon:
             if Figure.pointIsControl(p, kwargs['point']):
                 if 'event' in kwargs and kwargs['event'].button() is Qt.RightButton:
-                    del machine.points[machine.points.index(p)]
-                    machine.decompose()
-                    if len(machine.points) < 3:
+                    del machine.polygon[machine.polygon.index(p)]
+                    if len(machine.polygon) < 3:
                         machine.state = machine.delete
+                    else:
+                        machine.decompose()
                 else:
                     self.control1 = p
                 return True
@@ -92,20 +93,20 @@ class Polygon(Figure):
 
         self.decomposer = BayazitDecomposer()
 
-        self.points = []
+        self.polygon = []
         self.convex_polygons = []
 
         if 'figure' in kwargs:
-            self.points = [dict2qpoint(p) for p in kwargs['figure']['editor']]
+            self.polygon = [dict2qpoint(p) for p in kwargs['figure']['editor']]
             self.decompose()
             self.state = self.control
 
         if len(args) > 0:
-            self.points = args
+            self.polygon = args
 
     def decompose(self):
         del self.convex_polygons[:]
-        self.convex_polygons = self.decomposer.decompose(self.points)
+        self.convex_polygons = self.decomposer.decompose(self.polygon)
 
     def draw(self, painter):
 
@@ -114,7 +115,7 @@ class Polygon(Figure):
                                    QColor(21, 144, 232)),
                             1,
                             Qt.SolidLine))
-        painter.drawPolygon(QPolygon(self.points))
+        painter.drawPolygon(QPolygon(self.polygon))
 
         for i, poly in enumerate(self.convex_polygons):
             if poly:
@@ -123,9 +124,9 @@ class Polygon(Figure):
                                     Qt.SolidLine))
                 painter.drawPolygon(QPolygon(poly))
 
-        for point in self.points:
-            painter.setPen(QPen(QBrush(QColor(31, 174, 222) if point is self.points[0] else
-                                       QColor(222, 79, 31) if point is self.points[-1] else
+        for point in self.polygon:
+            painter.setPen(QPen(QBrush(QColor(31, 174, 222) if point is self.polygon[0] else
+                                       QColor(222, 79, 31) if point is self.polygon[-1] else
                                        QColor(78, 222, 31)),
                                 2,
                                 Qt.SolidLine))
@@ -135,11 +136,11 @@ class Polygon(Figure):
         painter.restore()
 
     def getDict(self):
-        return {'polygon': {'editor': [qpoint2dict(point) for point in self.points],
+        return {'polygon': {'editor': [qpoint2dict(point) for point in self.polygon],
                             'convex': [[qpoint2dict(point) for point in convex] for convex in self.convex_polygons]}}
 
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
-        return 'Polygon(' + ('{}' * len(self.points)).format(*[qpoint2str(point) for point in self.points]) + ')'
+        return 'Polygon(' + ('{}' * len(self.polygon)).format(*[qpoint2str(point) for point in self.polygon]) + ')'
