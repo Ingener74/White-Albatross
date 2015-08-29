@@ -61,20 +61,17 @@ class MovingImage(State):
         self.old_offset = QPoint()
 
     def mouseDown(self, machine, *args, **kwargs):
-        point = kwargs['point']
-        self.start = point * machine.scale + machine.offset
+        self.start = kwargs['event'].pos() / kwargs['scale']
         self.old_offset = machine.offset
         return False
 
     def mouseMove(self, machine, *args, **kwargs):
-        point = kwargs['point']
-        machine.offset = self.old_offset + ((point * machine.scale + machine.offset) - self.start)
+        machine.offset = self.old_offset + (kwargs['event'].pos() / kwargs['scale'] - self.start)
         machine.update()
         pass
 
     def mouseUp(self, machine, *args, **kwargs):
-        point = kwargs['point']
-        machine.offset = self.old_offset + ((point * machine.scale + machine.offset) - self.start)
+        machine.offset = self.old_offset + (kwargs['event'].pos() / kwargs['scale'] - self.start)
         machine.update()
         pass
 
@@ -121,13 +118,13 @@ class WhiteAlbatrossWidget(QWidget):
         else:
             self.state = self.figure_adding
 
-        self.state.mouseDown(self, point=self.get_point(e.pos()), event=e)
+        self.state.mouseDown(self, point=self.get_point(e.pos()), event=e, scale=self.scale)
 
     def mouseMoveEvent(self, e):
-        self.state.mouseMove(self, point=self.get_point(e.pos()))
+        self.state.mouseMove(self, point=self.get_point(e.pos()), event=e, scale=self.scale)
 
     def mouseReleaseEvent(self, e):
-        self.state.mouseUp(self, point=self.get_point(e.pos()))
+        self.state.mouseUp(self, point=self.get_point(e.pos()), event=e, scale=self.scale)
 
     def wheelEvent(self, e):
         self.scale += e.delta() / 1200.0
