@@ -62,17 +62,18 @@ class MovingImage(State):
 
     def mouseDown(self, machine, *args, **kwargs):
         self.start = kwargs['event'].pos() / kwargs['scale']
-        self.old_offset = machine.offset
+        self.old_offset = machine.image.draw_offset
         return False
 
     def mouseMove(self, machine, *args, **kwargs):
-        machine.offset = self.old_offset + (kwargs['event'].pos() / kwargs['scale'] - self.start)
+        machine.image.draw_offset = self.old_offset + (kwargs['event'].pos() / kwargs['scale'] - self.start)
         machine.update()
         pass
 
     def mouseUp(self, machine, *args, **kwargs):
-        machine.offset = self.old_offset + (kwargs['event'].pos() / kwargs['scale'] - self.start)
+        machine.image.draw_offset = self.old_offset + (kwargs['event'].pos() / kwargs['scale'] - self.start)
         machine.update()
+        machine.save()
         pass
 
     def draw(self, painter):
@@ -102,32 +103,36 @@ class WhiteAlbatrossWidget(QWidget):
 
         self.image = None
 
-        self.offset = QPoint()
-        self.scale = 1.0
-
         self.figure_adding = FigureAdding()
         self.moving_image = MovingImage()
         self.state = self.figure_adding
 
     def get_point(self, point):
-        return point / self.scale - self.offset
+        if self.image:
+            return point / self.image.draw_scale - self.image.draw_offset
+        else:
+            raise ValueError("no selected image")
 
     def mousePressEvent(self, e):
-        if e.button() is Qt.MidButton or e.button() is Qt.MiddleButton:
-            self.state = self.moving_image
-        else:
-            self.state = self.figure_adding
+        if self.image:
+            if e.button() is Qt.MidButton or e.button() is Qt.MiddleButton:
+                self.state = self.moving_image
+            else:
+                self.state = self.figure_adding
 
-        self.state.mouseDown(self, point=self.get_point(e.pos()), event=e, scale=self.scale)
+            self.state.mouseDown(self, point=self.get_point(e.pos()), event=e, scale=self.image.draw_scale)
 
     def mouseMoveEvent(self, e):
-        self.state.mouseMove(self, point=self.get_point(e.pos()), event=e, scale=self.scale)
+        if self.image:
+            self.state.mouseMove(self, point=self.get_point(e.pos()), event=e, scale=self.image.draw_scale)
 
     def mouseReleaseEvent(self, e):
-        self.state.mouseUp(self, point=self.get_point(e.pos()), event=e, scale=self.scale)
+        if self.image:
+            self.state.mouseUp(self, point=self.get_point(e.pos()), event=e, scale=self.image.draw_scale)
 
     def wheelEvent(self, e):
-        self.scale += e.delta() / 1200.0
+        if self.image:
+            self.image.draw_scale += e.delta() / 1200.0
         self.update()
 
     def paintEvent(self, event):
@@ -139,8 +144,10 @@ class WhiteAlbatrossWidget(QWidget):
         painter.fillPath(painter_path,
                          QBrush(QImage(':/main/background.png')))
 
-        painter.setTransform(QTransform().scale(self.scale, self.scale).translate(self.offset.x(), self.offset.y()))
         if self.image:
+            painter.setTransform(QTransform().
+                                 scale(self.image.draw_scale, self.image.draw_scale).
+                                 translate(self.image.draw_offset.x(), self.image.draw_offset.y()))
             old_pen = painter.pen()
 
             new_pen = QPen()
@@ -159,11 +166,11 @@ class WhiteAlbatrossWidget(QWidget):
         if os.path.exists(json_file_name):
             try:
                 with open(json_file_name) as f:
-                    self.images = [Image(self.directory, image['file_name'], image['figures']) for image in json.load(f)]
+                    self.images = [Image(self.directory, json_dict=js_image) for js_image in json.load(f)]
             except ValueError, e:
-                self.images = [Image(self.directory, image) for image in images]
+                self.images = [Image(self.directory, file_name=image) for image in images]
         else:
-            self.images = [Image(self.directory, image) for image in images]
+            self.images = [Image(self.directory, file_name=image) for image in images]
 
     def selectImage(self, index):
         """

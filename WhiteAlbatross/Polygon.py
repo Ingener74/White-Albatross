@@ -1,22 +1,11 @@
 # encoding: utf8
-from PySide.QtCore import Qt, QPoint
+from PySide.QtCore import Qt
 from PySide.QtGui import QPolygon, QPen, QColor, QBrush
 
 from WhiteAlbatross.Figure import Figure
 from WhiteAlbatross.State import State
 from WhiteAlbatross.BayazitDecomposer import BayazitDecomposer
-
-
-def qpoint2dict(point):
-    return {'x': point.x(), 'y': point.y()}
-
-
-def dict2qpoint(dictionary):
-    return QPoint(dictionary['x'], dictionary['y'])
-
-
-def qpoint2str(point):
-    return '({x}, {y})'.format(x=point.x(), y=point.y())
+from WhiteAlbatross.Tools import qpoint2dict, dict2qpoint, qpoint2str
 
 
 class AddPoint(State):
