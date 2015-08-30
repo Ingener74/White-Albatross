@@ -16,11 +16,11 @@ class AddPoint(State):
         point = kwargs.get('point')
         # Если нажатие в какой нибудь точке кроме последней то просто ничего не делаем и выходим
         for p in machine.polygon:
-            if Figure.pointIsControl(p, point) and p is not machine.polygon[-1]:
+            if Figure.pointIsControl(p, point, kwargs['scale']) and p is not machine.polygon[-1]:
                 return True  # новую фигуру добавлять не надо
 
         # Если у нас больше 1 точки и мы тыкаем в последнюю тогда ...
-        if len(machine.polygon) > 1 and Figure.pointIsControl(machine.polygon[-1], point):
+        if len(machine.polygon) > 1 and Figure.pointIsControl(machine.polygon[-1], point, kwargs['scale']):
             # ... делаем декомпозицию ломаной и ...
             machine.decompose()
 
@@ -41,7 +41,7 @@ class Control(State):
 
     def mouseDown(self, machine, *args, **kwargs):
         for p in machine.polygon:
-            if Figure.pointIsControl(p, kwargs['point']):
+            if Figure.pointIsControl(p, kwargs['point'], kwargs['scale']):
                 if 'event' in kwargs and kwargs['event'].button() is Qt.RightButton:
                     del machine.polygon[machine.polygon.index(p)]
                     if len(machine.polygon) < 3:
@@ -66,9 +66,9 @@ class Control(State):
 
         self.control1 = None
 
-    def draw(self, painter):
+    def draw(self, painter, scale):
         if self.control1:
-            painter.drawEllipse(self.control1, Figure.CTRL_RADIUS + 4, Figure.CTRL_RADIUS + 4)
+            painter.drawEllipse(self.control1, (Figure.CTRL_RADIUS + 4) / scale, (Figure.CTRL_RADIUS + 4) / scale)
 
 
 # noinspection PyPep8Naming
@@ -97,31 +97,29 @@ class Polygon(Figure):
         del self.convex_polygons[:]
         self.convex_polygons = self.decomposer.decompose(self.polygon)
 
-    def draw(self, painter):
+    def draw(self, painter, scale):
 
         painter.save()
         painter.setPen(QPen(QBrush(QColor(232, 109, 21) if self.state is self.add_point else
                                    QColor(21, 144, 232)),
-                            1,
+                            self.lineWidth(scale),
                             Qt.SolidLine))
         painter.drawPolygon(QPolygon(self.polygon))
 
         for i, poly in enumerate(self.convex_polygons):
             if poly:
                 painter.setPen(QPen(QBrush(Figure.COLORS[i % len(Figure.COLORS)]),
-                                    2,
+                                    self.lineWidth(scale),
                                     Qt.SolidLine))
                 painter.drawPolygon(QPolygon(poly))
 
         for point in self.polygon:
-            painter.setPen(QPen(QBrush(QColor(31, 174, 222) if point is self.polygon[0] else
-                                       QColor(222, 79, 31) if point is self.polygon[-1] else
-                                       QColor(78, 222, 31)),
-                                2,
-                                Qt.SolidLine))
-            painter.drawEllipse(point, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
+            self.drawControlPoint(painter, point,
+                                  QColor(31, 174, 222) if point is self.polygon[0] else
+                                  QColor(222, 79, 31) if point is self.polygon[-1] else
+                                  QColor(78, 222, 31), scale)
 
-        Figure.draw(self, painter)
+        Figure.draw(self, painter, scale)
         painter.restore()
 
     def getDict(self):

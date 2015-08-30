@@ -43,7 +43,7 @@ class SecondPoint(State):
     def mouseUp(self, machine, *args, **kwargs):
         point = kwargs['point']
         machine.ctrl = point
-        if not Figure.pointIsControl(machine.center, point):
+        if not Figure.pointIsControl(machine.center, point, kwargs['scale']):
             machine.state = machine.control
 
 
@@ -58,9 +58,10 @@ class Control(State):
 
     def mouseDown(self, machine, *args, **kwargs):
         point = kwargs['point']
-        if Figure.pointIsControl(machine.center, point):
+        scale = kwargs['scale']
+        if Figure.pointIsControl(machine.center, point, scale):
             self.point = machine.center
-        if Figure.pointIsControl(machine.ctrl, point):
+        if Figure.pointIsControl(machine.ctrl, point, scale):
             self.point = machine.ctrl
 
         if self.point:
@@ -120,23 +121,20 @@ class Circle(Figure):
             self.center = QPoint(args[0], args[1])
             self.ctrl = QPoint(args[2], args[3])
 
-    def draw(self, painter):
+    def draw(self, painter, scale):
         painter.save()
         if not self.center.isNull() and not self.ctrl.isNull():
             radius = distance(self.center, self.ctrl)
             painter.setPen(QPen(QBrush(QColor(232, 109, 21) if self.state is not self.control else
                                        QColor(21, 144, 232)),
-                                2,
+                                self.lineWidth(scale),
                                 Qt.SolidLine))
             painter.drawEllipse(self.center, radius, radius)
 
-            painter.setPen(QPen(QBrush(QColor(31, 174, 222)), 2, Qt.SolidLine))
-            painter.drawEllipse(self.center, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
+            self.drawControlPoint(painter, self.center, QColor(31, 174, 222), scale)
+            self.drawControlPoint(painter, self.ctrl, QColor(222, 79, 31), scale)
 
-            painter.setPen(QPen(QBrush(QColor(222, 79, 31)), 2, Qt.SolidLine))
-            painter.drawEllipse(self.ctrl, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
-
-        Figure.draw(self, painter)
+        Figure.draw(self, painter, scale)
         painter.restore()
 
     def getDict(self):

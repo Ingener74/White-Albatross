@@ -42,7 +42,7 @@ class Image(object):
 
         for figure in self.figures:
             if figure:
-                figure.draw(painter)
+                figure.draw(painter, self.draw_scale)
 
     def getDict(self):
         return {

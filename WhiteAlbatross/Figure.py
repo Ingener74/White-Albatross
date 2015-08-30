@@ -1,6 +1,9 @@
 # encoding: utf8
 import math
-from PySide.QtGui import QColor
+
+from PySide.QtCore import Qt
+from PySide.QtGui import QColor, QPen, QBrush
+
 from WhiteAlbatross.State import State
 
 
@@ -50,12 +53,21 @@ class Figure(object):
     def mouseUp(self, *args, **kwargs):
         self.state.mouseUp(self, *args, **kwargs)
 
-    def draw(self, painter):
-        self.state.draw(painter)
+    def draw(self, painter, scale):
+        self.state.draw(painter, scale)
 
     def getDict(self):
         raise NotImplementedError
 
     @staticmethod
-    def pointIsControl(control_point, point):
+    def pointIsControl(control_point, point, scale):
+        # return distance(control_point, point) < Figure.CTRL_RADIUS / scale
         return distance(control_point, point) < Figure.CTRL_RADIUS
+
+    def lineWidth(self, scale):
+        return 2
+
+    def drawControlPoint(self, painter, point, color, scale):
+        painter.setPen(QPen(QBrush(color), self.lineWidth(scale), Qt.SolidLine))
+        # painter.drawEllipse(point, Figure.CTRL_RADIUS / scale, Figure.CTRL_RADIUS / scale)
+        painter.drawEllipse(point, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)

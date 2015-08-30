@@ -153,6 +153,8 @@ class WhiteAlbatrossWidget(QWidget):
                          QBrush(QImage(':/main/background.png')))
 
         if self.image:
+            painter.drawText(10, 20, str(self.image.draw_scale))
+
             painter.setTransform(QTransform().
                                  scale(self.image.draw_scale, self.image.draw_scale).
                                  translate(self.image.draw_offset.x(), self.image.draw_offset.y()))

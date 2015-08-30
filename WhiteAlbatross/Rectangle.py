@@ -1,6 +1,6 @@
 # encoding: utf8
 from PySide.QtCore import QRect, QPoint, Qt
-from PySide.QtGui import QPainterPath, QPen, QBrush, QColor
+from PySide.QtGui import QPen, QBrush, QColor
 
 from WhiteAlbatross.Figure import Figure
 from WhiteAlbatross.State import State
@@ -29,7 +29,7 @@ class SecondPoint(State):
 
     def mouseUp(self, machine, *args, **kwargs):
         machine.p2 = kwargs['point']
-        if not Figure.pointIsControl(machine.p1, kwargs['point']):
+        if not Figure.pointIsControl(machine.p1, kwargs['point'], kwargs['scale']):
             machine.state = machine.control
 
 
@@ -40,9 +40,9 @@ class Control(State):
 
     def mouseDown(self, machine, *args, **kwargs):
         point = kwargs['point']
-        if Figure.pointIsControl(machine.p1, point):
+        if Figure.pointIsControl(machine.p1, point, kwargs['scale']):
             self.point = machine.p1
-        if Figure.pointIsControl(machine.p2, point):
+        if Figure.pointIsControl(machine.p2, point, kwargs['scale']):
             self.point = machine.p2
 
         if self.point:
@@ -104,7 +104,7 @@ class Rectangle(Figure):
             self.p2 = QPoint(kwargs['figure']['x2'], kwargs['figure']['y2'])
             self.state = self.control
 
-    def draw(self, painter):
+    def draw(self, painter, scale):
 
         # brush = QBrush()
         # brush.setColor(QColor(0, 100, 0, 100))
@@ -118,17 +118,14 @@ class Rectangle(Figure):
         if not self.p1.isNull() and not self.p2.isNull():
             painter.setPen(QPen(QBrush(QColor(232, 109, 21) if self.state is not self.control else
                                        QColor(21, 144, 232)),
-                                2,
+                                self.lineWidth(scale),
                                 Qt.SolidLine))
             painter.drawRect(QRect(self.p1, self.p2))
 
-            painter.setPen(QPen(QBrush(QColor(31, 174, 222)), 2, Qt.SolidLine))
-            painter.drawEllipse(self.p1, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
+            self.drawControlPoint(painter, self.p1, QColor(31, 174, 222), scale)
+            self.drawControlPoint(painter, self.p2, QColor(222, 79, 31), scale)
 
-            painter.setPen(QPen(QBrush(QColor(222, 79, 31)), 2, Qt.SolidLine))
-            painter.drawEllipse(self.p2, Figure.CTRL_RADIUS, Figure.CTRL_RADIUS)
-
-        Figure.draw(self, painter)
+        Figure.draw(self, painter, scale)
         painter.restore()
 
     def getDict(self):

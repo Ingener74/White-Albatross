@@ -18,5 +18,5 @@ class State(object):
     def wheelEvent(self, machine, *args, **kwargs):
         pass
 
-    def draw(self, painter):
+    def draw(self, painter, scale):
         pass
