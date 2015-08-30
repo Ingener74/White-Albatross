@@ -15,5 +15,8 @@ class State(object):
     def mouseUp(self, machine, *args, **kwargs):
         pass
 
+    def wheelEvent(self, machine, *args, **kwargs):
+        pass
+
     def draw(self, painter):
         pass

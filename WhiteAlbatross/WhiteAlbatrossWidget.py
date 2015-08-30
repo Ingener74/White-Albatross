@@ -76,8 +76,13 @@ class MovingImage(State):
         machine.save()
         pass
 
-    def draw(self, painter):
-        pass
+    def wheelEvent(self, machine, *args, **kwargs):
+        if machine.image:
+            event = kwargs['event']
+
+            delta_scale = event.delta() / 1200.0
+
+            machine.image.draw_scale += delta_scale
 
 
 # noinspection PyPep8Naming
@@ -132,7 +137,10 @@ class WhiteAlbatrossWidget(QWidget):
 
     def wheelEvent(self, e):
         if self.image:
-            self.image.draw_scale += e.delta() / 1200.0
+            old_state = self.state
+            self.state = self.moving_image
+            self.state.wheelEvent(self, point=self.get_point(e.pos()), event=e, scale=self.image.draw_scale)
+            self.state = old_state
         self.update()
 
     def paintEvent(self, event):
