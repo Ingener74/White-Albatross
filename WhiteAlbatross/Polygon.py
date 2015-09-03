@@ -1,11 +1,11 @@
 # encoding: utf8
 from PySide.QtCore import Qt
-from PySide.QtGui import QPolygon, QPen, QColor, QBrush
+from PySide.QtGui import (QPolygon, QPen, QColor, QBrush)
 
 from WhiteAlbatross.Figure import Figure
 from WhiteAlbatross.State import State
 from WhiteAlbatross.BayazitDecomposer import BayazitDecomposer
-from WhiteAlbatross.Tools import qpoint2dict, dict2qpoint, qpoint2str
+from WhiteAlbatross.Tools import (qpoint2dict, dict2qpoint, qpoint2str)
 
 
 class AddPoint(State):
@@ -111,6 +111,9 @@ class Polygon(Figure):
                 painter.setPen(QPen(QBrush(Figure.COLORS[i % len(Figure.COLORS)]),
                                     self.lineWidth(scale),
                                     Qt.SolidLine))
+                color = Figure.COLORS[i % len(Figure.COLORS)]
+                color.setAlpha(150)
+                painter.setBrush(QBrush(QColor(color)))
                 painter.drawPolygon(QPolygon(poly))
 
         for point in self.polygon:

@@ -1,7 +1,7 @@
 # encoding: utf8
 
-from PySide.QtCore import QPoint, Qt
-from PySide.QtGui import QPen, QColor
+from PySide.QtCore import (QPoint, Qt)
+from PySide.QtGui import (QPen, QColor)
 from PySide.QtGui import QBrush
 
 from WhiteAlbatross.Figure import distance, Figure
@@ -129,6 +129,7 @@ class Circle(Figure):
                                        QColor(21, 144, 232)),
                                 self.lineWidth(scale),
                                 Qt.SolidLine))
+            painter.setBrush(QBrush(QColor(21, 144, 232, 150)))
             painter.drawEllipse(self.center, radius, radius)
 
             self.drawControlPoint(painter, self.center, QColor(31, 174, 222), scale)

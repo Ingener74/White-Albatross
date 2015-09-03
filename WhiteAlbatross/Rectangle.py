@@ -1,6 +1,6 @@
 # encoding: utf8
-from PySide.QtCore import QRect, QPoint, Qt
-from PySide.QtGui import QPen, QBrush, QColor
+from PySide.QtCore import (QRect, QPoint, Qt)
+from PySide.QtGui import (QPen, QBrush, QColor)
 
 from WhiteAlbatross.Figure import Figure
 from WhiteAlbatross.State import State
@@ -64,7 +64,7 @@ class Control(State):
     def mouseUp(self, machine, *args, **kwargs):
         self.point = None
 
-    def draw(self, painter):
+    def draw(self, painter, scale):
         if self.point:
             pen = QPen()
             pen.setColor(QColor(255, 0, 0))
@@ -105,21 +105,13 @@ class Rectangle(Figure):
             self.state = self.control
 
     def draw(self, painter, scale):
-
-        # brush = QBrush()
-        # brush.setColor(QColor(0, 100, 0, 100))
-        # painter.setBrush(brush)
-        #
-        # painter_path = QPainterPath()
-        # painter_path.addRect(self.x1, self.y1, self.x2, self.y2)
-        # painter.drawPath(painter_path)
-
         painter.save()
         if not self.p1.isNull() and not self.p2.isNull():
             painter.setPen(QPen(QBrush(QColor(232, 109, 21) if self.state is not self.control else
                                        QColor(21, 144, 232)),
                                 self.lineWidth(scale),
                                 Qt.SolidLine))
+            painter.setBrush(QBrush(QColor(21, 144, 232, 150)))
             painter.drawRect(QRect(self.p1, self.p2))
 
             self.drawControlPoint(painter, self.p1, QColor(31, 174, 222), scale)
