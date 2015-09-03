@@ -49,7 +49,7 @@ class FigureAdding(State):
             machine.update()
             machine.figuresChanged.emit(machine.image.figures)
 
-    def draw(self, painter):
+    def draw(self, painter, scale):
         pass
 
 
@@ -137,8 +137,7 @@ class WhiteAlbatrossWidget(QWidget):
 
     def wheelEvent(self, e):
         if self.image:
-            old_state = self.state
-            self.state = self.moving_image
+            old_state, self.state = self.state, self.moving_image
             self.state.wheelEvent(self, point=self.get_point(e.pos()), event=e, scale=self.image.draw_scale)
             self.state = old_state
         self.update()
@@ -187,9 +186,14 @@ class WhiteAlbatrossWidget(QWidget):
         Выбираем изображение для фона
         :param index: Изображение
         """
+        if self.image:
+            self.image.unloadImage()
         self.image = self.images[index]
+        self.image.loadImage()
+
         if self.image:
             self.figuresChanged.emit(self.image.figures)
+
         self.update()
 
     def getPolygons(self):

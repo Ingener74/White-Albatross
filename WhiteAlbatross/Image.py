@@ -35,10 +35,11 @@ class Image(object):
             self.draw_offset = QPoint()
             self.file_name = kwargs['file_name']
 
+        self.image = None
+
     def draw(self, painter):
-        qimage = QImage(self.directory.path() + QDir.separator() + self.file_name)
-        painter.drawImage(0, 0, qimage)
-        painter.drawRect(0, 0, qimage.width(), qimage.height())
+        painter.drawImage(0, 0, self.image)
+        painter.drawRect(0, 0, self.image.width(), self.image.height())
 
         for figure in self.figures:
             if figure:
@@ -54,3 +55,9 @@ class Image(object):
 
     def addFigure(self, figure):
         self.figures.append(figure)
+
+    def loadImage(self):
+        self.image = QImage(self.directory.path() + QDir.separator() + self.file_name)
+
+    def unloadImage(self):
+        self.image = None
