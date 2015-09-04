@@ -35,6 +35,12 @@ gulp.task('html', function () {
         .pipe(connect.reload());
 });
 
+gulp.task('imgs', function () {
+    gulp.src('./app/img/*.png')
+        .pipe(gulp.dest('./build/img'))
+        .pipe(connect.reload());
+})
+
 // Copy java script files
 gulp.task('js', function () {
     gulp.src('bower_components/bootstrap/dist/js/*.min.js')
@@ -50,7 +56,7 @@ gulp.task('css', function () {
 });
 
 gulp.task('build', function (callback) {
-    run_sequence('clean', ['html', 'js', 'css'], callback);
+    run_sequence('clean', ['html', 'imgs', 'js', 'css'], callback);
 });
 
 gulp.task('watch', function () {
