@@ -39,7 +39,7 @@ gulp.task('imgs', function () {
     gulp.src('./app/img/*.png')
         .pipe(gulp.dest('./build/img'))
         .pipe(connect.reload());
-})
+});
 
 // Copy java script files
 gulp.task('js', function () {
